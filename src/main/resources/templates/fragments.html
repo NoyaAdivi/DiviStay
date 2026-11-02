@@ -30,6 +30,7 @@
 <body>
 
 <header th:fragment="header" class="topbar">
+    <p class="demo-bar" th:text="#{demo.banner}">Demo project</p>
     <a class="skip" href="#main" th:text="#{skip}">Skip to main content</a>
     <div class="wrap topbar-inner">
         <a th:href="@{/}" class="brand" th:aria-label="#{nav.home}">

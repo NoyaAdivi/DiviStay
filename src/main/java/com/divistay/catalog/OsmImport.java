@@ -96,6 +96,7 @@ public class OsmImport {
                                 JsonNode t = e.path("tags");
                                 double la = e.has("lat") ? e.path("lat").asDouble() : e.path("center").path("lat").asDouble();
                                 double lo = e.has("lon") ? e.path("lon").asDouble() : e.path("center").path("lon").asDouble();
+                                if (outsideCity(key, la, lo)) continue;
                                 String suburb = t.path("addr:suburb").asText(t.path("addr:city_district").asText(""));
                                 list.add(String.join("\t", key, clean(t.path("name").asText("")), clean(t.path("name:en").asText("")),
                                         clean(t.path("name:he").asText("")), clean(t.path("stars").asText("")),
@@ -123,6 +124,15 @@ public class OsmImport {
         logLines.add("DONE");
         write(out, log, rows, logLines);
         System.out.println("Done: " + rows.values().stream().mapToInt(List::size).sum() + " hotels in " + out.toAbsolutePath());
+    }
+
+    /** The search boxes are rectangles, so some reach over a border or into the next city. */
+    static boolean outsideCity(String key, double lat, double lon) {
+        return switch (key) {
+            case "eilat" -> lon >= 34.975 || lat < 29.493; // Aqaba (Jordan) and Taba (Egypt)
+            case "jerusalem" -> lat < 31.725; // Bethlehem and Beit Jala
+            default -> false;
+        };
     }
 
     private static synchronized void write(Path out, Path log, ConcurrentHashMap<String, List<String>> rows, List<String> logLines) {

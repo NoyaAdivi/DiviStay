@@ -1167,3 +1167,15 @@ form.show-amount .member-row { grid-template-columns: 30px 1fr 1.3fr .7fr 36px; 
 .city-text { display: grid; gap: 1px; }
 .city-text b { font-size: 1.05rem; }
 .a11y-motion .country { animation: none !important; }
+
+/* Demo notice shown on every page */
+.demo-bar {
+  margin: 0;
+  padding: 6px 16px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: .82rem;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+}

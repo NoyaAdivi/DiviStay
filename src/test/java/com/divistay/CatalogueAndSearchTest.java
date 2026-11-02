@@ -32,6 +32,14 @@ class CatalogueAndSearchTest {
     private static final List<Hotel> HOTELS = HotelCatalog.load(new RoomFactory());
 
     @Test
+    void hotelsStayInsideTheirCity() {
+        List<Hotel> eilat = HOTELS.stream().filter(h -> h.city().equals("Eilat")).toList();
+        assertTrue(eilat.size() > 20, "Eilat hotels: " + eilat.size());
+        assertTrue(eilat.stream().noneMatch(h -> h.lon() >= 34.975 || h.lat() < 29.493), "no Aqaba or Taba");
+        assertTrue(HOTELS.stream().filter(h -> h.city().equals("Jerusalem")).noneMatch(h -> h.lat() < 31.725), "no Bethlehem");
+    }
+
+    @Test
     void theCatalogueHasOverTenThousandRealHotelsAndIsTheSameEveryRun() {
         List<Hotel> again = HotelCatalog.load(new RoomFactory());
         assertTrue(HOTELS.size() >= 10_000, "at least 10,000 hotels, got " + HOTELS.size());
