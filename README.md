@@ -7,6 +7,13 @@
 <p align="center"><b>Group hotel booking with payment splitting.</b><br>
 The organizer picks the rooms, everyone pays their own share from a personal link, and the booking is confirmed only when the whole group has paid.</p>
 
+<p align="center"><a href="https://divistay.onrender.com"><b>Live demo</b></a> · <a href="docs/">Architecture &amp; requirements (PDF)</a></p>
+
+<p align="center"><img src="docs/screenshot.jpg" alt="DiviStay home page" width="800"></p>
+
+<p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
+
+
 ---
 
 This project started as a **software architecture and requirements** project (SRS, UML, design patterns – see [`docs/`](docs/)) and was then **implemented in Java 21 + Spring Boot**, following the same design.
@@ -56,7 +63,7 @@ classDiagram
 
 ## Engineering details
 
-- **Real hotels:** over 10,000 real hotels in 60 destinations and 21 countries, from OpenStreetMap (ODbL): name, address, location, and stars when known. Rooms, prices and reviews are simulated (there is no access to real availability), and the photos match the kind of place: city, seaside, Greek island or resort.
+- **Real hotels:** over 18,000 real hotels in 60 destinations and 21 countries, from OpenStreetMap (ODbL): name, address, location, and stars when known. Rooms, prices and reviews are simulated (there is no access to real availability), and the photos match the kind of place: city, seaside, Greek island or resort.
 - **Search by city or country,** in Hebrew or English, and a destinations page by country.
 - **Search like a real booking site:** adults, children with their ages, and how many people split the bill. For every hotel the cheapest set of rooms that sleeps the whole group is found (a small knapsack), with the price per payer. Filters for stars, rating, price and facilities, sorting and pages.
 - **Concurrency:** holding rooms is atomic and all-or-nothing; a test races 32 threads for one room and checks that exactly one wins. Payments and the background job lock the same group, so they can never act on it at the same moment.
