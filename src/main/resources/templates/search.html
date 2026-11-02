@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{search.pageTitle})}"></head>
+<body class="search-page">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" th:with="agesQ=${guests.childAges()}">
+    <section class="search-band">
+        <div class="wrap">
+            <div th:replace="~{fragments :: searchbox(${city}, ${stay.checkIn()}, ${stay.checkOut()}, ${guests}, ${today}, 'search3-band')}"></div>
+        </div>
+    </section>
+
+    <div class="wrap results-layout">
+        <!-- ============ FILTERS ============ -->
+        <aside class="filters card" aria-labelledby="filtersTitle">
+            <form method="get" th:action="@{/search}" data-autosubmit id="filterForm">
+                <input type="hidden" name="city" th:value="${city}">
+                <input type="hidden" name="checkIn" th:value="${stay.checkIn()}">
+                <input type="hidden" name="checkOut" th:value="${stay.checkOut()}">
+                <input type="hidden" name="adults" th:value="${guests.adults()}">
+                <input type="hidden" name="payers" th:value="${guests.payers()}">
+                <input type="hidden" name="ages" th:each="a : ${guests.childAges()}" th:value="${a}">
+                <input type="hidden" name="sort" th:value="${query.sort()}">
+                <h2 id="filtersTitle" class="h3"><span aria-hidden="true">🎛️</span> <span th:text="#{filter.title}">Filter</span></h2>
+
+                <fieldset class="f-group">
+                    <legend th:text="#{filter.stars}">Stars</legend>
+                    <div class="chips">
+                        <label class="chip" th:each="n : ${#numbers.sequence(5, 2, -1)}">
+                            <input type="checkbox" name="stars" th:value="${n}" th:checked="${query.stars().contains(n)}">
+                            <span><span th:text="${n}">5</span> ★</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="f-group">
+                    <legend th:text="#{filter.rating}">Guest rating</legend>
+                    <div class="chips">
+                        <label class="chip" th:each="r : ${ {0, 7, 8, 9} }">
+                            <input type="radio" name="minRating" th:value="${r}" th:checked="${query.minRating() == r}">
+                            <span th:text="${r == 0} ? #{filter.any} : (${r} + '+')">Any</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset class="f-group">
+                    <legend th:text="#{filter.maxPrice}">Max price per room / night</legend>
+                    <select name="maxPrice" th:aria-label="#{filter.maxPrice}">
+                        <option value="0" th:selected="${maxPrice == 0}" th:text="#{filter.noLimit}">No limit</option>
+                        <option th:each="m : ${ {300, 500, 800, 1200, 2000} }" th:value="${m}" th:selected="${maxPrice == m}" th:text="'₪' + ${m}">₪500</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="f-group">
+                    <legend th:text="#{filter.amenities}">Facilities</legend>
+                    <label class="fcheck" th:each="a : ${allAmenities}">
+                        <input type="checkbox" name="amenities" th:value="${a}" th:checked="${query.amenities().contains(a)}">
+                        <span><span aria-hidden="true" th:text="${a.emoji()}">📶</span> <span th:text="${@tr.amenity(a)}">Wi-Fi</span></span>
+                    </label>
+                </fieldset>
+                <noscript><button class="btn small" type="submit" th:text="#{filter.apply}">Apply</button></noscript>
+                <a class="btn ghost small" th:href="@{/search(city=${city},checkIn=${stay.checkIn()},checkOut=${stay.checkOut()},adults=${guests.adults()},ages=${agesQ},payers=${guests.payers()})}" th:text="#{filter.clear}">Clear filters</a>
+            </form>
+        </aside>
+
+        <!-- ============ RESULTS ============ -->
+        <section class="results" aria-labelledby="resTitle">
+            <div class="results-head">
+                <div>
+                    <h1 id="resTitle" class="h2">
+                        <span th:if="${city.isBlank()}" th:text="#{search.allCities}">All destinations</span>
+                        <span th:unless="${city.isBlank()}" th:text="${@tr.place(city)}">City</span>:
+                        <span th:text="#{search.found(${#numbers.formatInteger(results.total(), 1, 'COMMA')})}">120 hotels</span>
+                    </h1>
+                    <p class="muted small">
+                        <span th:text="${@fmt.date(stay.checkIn())}">in</span> – <span th:text="${@fmt.date(stay.checkOut())}">out</span> ·
+                        <span th:text="${@tr.nights(stay.nights())}">2 nights</span> ·
+                        <span th:text="${@tr.guests(guests.adults(), guests.children())}">2 adults</span> ·
+                        <span th:text="${@tr.payers(guests.payers())}">split between 2</span>
+                    </p>
+                </div>
+                <form method="get" th:action="@{/search}" data-autosubmit class="sort-form">
+                    <input type="hidden" name="city" th:value="${city}">
+                    <input type="hidden" name="checkIn" th:value="${stay.checkIn()}">
+                    <input type="hidden" name="checkOut" th:value="${stay.checkOut()}">
+                    <input type="hidden" name="adults" th:value="${guests.adults()}">
+                    <input type="hidden" name="payers" th:value="${guests.payers()}">
+                    <input type="hidden" name="ages" th:each="a : ${guests.childAges()}" th:value="${a}">
+                    <input type="hidden" name="stars" th:each="n : ${query.stars()}" th:value="${n}">
+                    <input type="hidden" name="minRating" th:value="${query.minRating()}">
+                    <input type="hidden" name="maxPrice" th:value="${maxPrice}">
+                    <input type="hidden" name="amenities" th:each="a : ${query.amenities()}" th:value="${a}">
+                    <label><span th:text="#{sort.label}">Sort by</span>
+                        <select name="sort">
+                            <option th:each="s : ${sorts}" th:value="${s}" th:selected="${query.sort() == s}" th:text="${#messages.msg('sort.' + s)}">Recommended</option>
+                        </select>
+                    </label>
+                </form>
+            </div>
+
+            <p class="demo-note small"><span aria-hidden="true">ℹ️</span> <span th:utext="#{search.realNote}">Real hotels from OpenStreetMap; prices and availability are simulated.</span></p>
+            <p th:if="${results.items().isEmpty()}" class="card empty">
+                <span aria-hidden="true" class="big-emoji">🧳</span>
+                <span th:text="#{search.none}">No hotel has free rooms…</span>
+            </p>
+
+            <article class="rcard" th:each="r, it : ${results.items()}" th:style="'--i:' + ${it.index}"
+                     th:with="h=${r.hotel()},link=@{/hotels/{id}(id=${h.id()},checkIn=${stay.checkIn()},checkOut=${stay.checkOut()},adults=${guests.adults()},ages=${agesQ},payers=${guests.payers()})}">
+                <a class="rcard-photo" th:href="${link}" tabindex="-1" aria-hidden="true">
+                    <img class="ph" th:src="${@photos.thumb(h, 0)}" alt="" loading="lazy">
+                </a>
+                <div class="rcard-main">
+                    <div class="hotel-city">
+                        <span th:text="${@tr.city(h.city())}">City</span><span th:if="${country != null or city.isBlank()}"> · <span th:text="${@tr.country(@tr.countryOf(h))}">Country</span></span><span th:if="${!h.address().isBlank()}"> · <span dir="auto" th:text="${h.address()}">Street</span></span>
+                    </div>
+                    <h2 class="h3"><a th:href="${link}" th:text="${@tr.hotelName(h)}">Hotel</a>
+                        <span class="stars" th:text="${#strings.repeat('★', h.stars())}" th:aria-label="#{hotel.starsLabel(${h.stars()})}">★★★★</span></h2>
+                    <p class="muted small clamp2" th:text="${@tr.hotelDescription(h)}">Description</p>
+                    <ul class="amen-mini">
+                        <li th:each="a, ai : ${h.amenityList()}" th:if="${ai.index < 5}" th:title="${@tr.amenity(a)}">
+                            <span aria-hidden="true" th:text="${a.emoji()}">📶</span> <span th:text="${@tr.amenity(a)}">Wi-Fi</span></li>
+                    </ul>
+                    <p class="plan-line">
+                        <span aria-hidden="true">🛏️</span>
+                        <span th:text="#{search.planFor(${guests.total()})}">For your group:</span>
+                        <b th:each="room, ri : ${r.plan().rooms()}"><span th:text="${@tr.roomType(room.type())}">Family room</span><span th:unless="${ri.last}">, </span></b>
+                    </p>
+                </div>
+                <div class="rcard-side">
+                    <div class="score-box">
+                        <span><b th:text="${@tr.ratingWord(h)}">Superb</b><small th:text="${@tr.reviews(h.reviews())}">812 reviews</small></span>
+                        <span class="score"><b th:text="${h.ratingText()}">9.1</b></span>
+                    </div>
+                    <div class="price-box">
+                        <small class="muted" th:text="${@tr.nights(stay.nights())} + ' · ' + #{search.totalFor}">2 nights · total</small>
+                        <b class="price big" dir="ltr" th:text="${@fmt.money(r.plan().total())}">₪2,400</b>
+                        <span class="per-payer"><span aria-hidden="true">💳</span> <span dir="ltr" th:text="${@fmt.money(r.perPayer())}">₪600</span> <span th:text="#{search.perPayer}">each</span></span>
+                    </div>
+                    <a class="btn primary" th:href="${link}" th:aria-label="${@tr.hotelName(h)} + ' – ' + #{search.choose}" th:text="#{search.choose}">See rooms</a>
+                </div>
+            </article>
+
+            <nav class="pager" th:if="${results.pages() > 1}" th:aria-label="#{pager.label}"
+                 th:with="base=@{/search(city=${city},checkIn=${stay.checkIn()},checkOut=${stay.checkOut()},adults=${guests.adults()},ages=${agesQ},payers=${guests.payers()},stars=${query.stars()},minRating=${query.minRating()},maxPrice=${maxPrice},amenities=${query.amenities()},sort=${query.sort()})}">
+                <a class="btn ghost small" th:if="${results.hasPrev()}" th:href="${base} + '&page=' + ${results.page() - 1}" rel="prev" th:text="#{pager.prev}">← Previous</a>
+                <span class="muted small" th:text="#{pager.status(${results.from()}, ${results.to()}, ${#numbers.formatInteger(results.total(), 1, 'COMMA')})}">1–20 of 300</span>
+                <a class="btn ghost small" th:if="${results.hasNext()}" th:href="${base} + '&page=' + ${results.page() + 1}" rel="next" th:text="#{pager.next}">Next →</a>
+            </nav>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

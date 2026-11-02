@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{dash.title})}"></head>
+<body th:attr="data-confetti=${group.status().name() == 'CONFIRMED'} ? ${group.id()} : null">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page">
+    <div th:if="${param.created}" class="alert success" role="status" th:utext="#{dash.created}">Your rooms are held…</div>
+    <div th:if="${notice}" class="alert success" role="status" th:text="${@tr.t(notice)}">Notice</div>
+    <div th:if="${error}" class="alert error" role="alert" th:text="${@tr.t(error)}">Error</div>
+
+    <div class="dash-head">
+        <div>
+            <div class="hotel-city" th:text="${@tr.city(hotel.city())}">City</div>
+            <h1 th:text="${@tr.hotelName(hotel)}">Hotel</h1>
+            <p class="muted">
+                <span th:text="${@fmt.date(group.stay().checkIn())}">in</span> – <span th:text="${@fmt.date(group.stay().checkOut())}">out</span> ·
+                <span th:text="#{dash.organizedBy}">organized by</span> <span th:text="${group.organizerName()}">Noya</span>
+            </p>
+        </div>
+        <span class="status" th:classappend="${'st-' + group.status().name().toLowerCase()}" th:text="${@tr.status(group.status())}">Status</span>
+    </div>
+
+    <section class="card" aria-label="Payments">
+        <div class="progress-head">
+            <span><strong th:text="${@fmt.money(group.paidAmount())}">₪0</strong> <span th:text="#{dash.of}">of</span>
+                <span th:text="${@fmt.money(group.total())}">₪0</span> <span th:text="#{dash.paid}">paid</span></span>
+            <span th:if="${group.status().name() == 'COLLECTING_PAYMENTS'}" class="countdown" data-reload="1" th:attr="data-expires=${@fmt.iso(group.lockExpiresAt())}">
+                <span aria-hidden="true">⏳</span> <b class="cd" dir="ltr">--:--</b> <span th:text="#{dash.left}">left</span>
+                (<span th:text="#{dash.until}">until</span> <span th:text="${@fmt.time(group.lockExpiresAt())}">12:00</span>)
+            </span>
+        </div>
+        <div class="bar" role="progressbar" th:attr="aria-valuenow=${group.paidPercent()}" aria-valuemin="0" aria-valuemax="100"><span th:style="'width:' + ${group.paidPercent()} + '%'"></span></div>
+
+        <p th:if="${group.status().name() == 'CONFIRMED'}" class="big-note confirmed-note">
+            🎉 <span th:text="#{dash.confirmed}">Confirmed by the hotel · confirmation number</span> <strong th:text="${group.hotelConfirmationNumber()}">HTL</strong>
+        </p>
+        <p th:if="${group.status().name() == 'AWAITING_HOTEL_RETRY'}" class="big-note"
+           th:text="#{dash.retry(${group.hotelAttempts()}, ${@fmt.time(group.nextHotelAttemptAt())})}">The hotel's system didn't answer…</p>
+        <p th:if="${group.status().name() == 'CANCELLED'}" class="big-note"
+           th:text="#{dash.cancelled(${@tr.t(group.cancellationReason())})}">Cancelled…</p>
+    </section>
+
+    <section class="card">
+        <h2><span th:text="#{dash.members}">Members</span> · <span th:text="${@tr.split(group.splitType())}">Equal split</span></h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr>
+                    <th scope="col" th:text="#{th.name}">Name</th><th scope="col" th:text="#{th.room}">Room</th>
+                    <th scope="col" th:text="#{th.share}">Share</th><th scope="col" th:text="#{th.status}">Status</th><th scope="col"><span class="sr-only" th:text="#{dash.remind}">Remind</span></th>
+                </tr></thead>
+                <tbody>
+                <tr th:each="m : ${group.members()}">
+                    <td><div class="who"><span class="avatar" aria-hidden="true" th:text="${m.name().isBlank()} ? ${m.email().substring(0,1)} : ${m.name().substring(0,1)}">N</span>
+                        <div><strong th:text="${m.name().isBlank()} ? ${m.email()} : ${m.name()}">Name</strong><br><span class="muted small" dir="ltr" th:text="${m.email()}">email</span></div></div></td>
+                    <td th:text="${m.roomId() != null and roomsById.get(m.roomId()) != null} ? ${@tr.room(roomsById.get(m.roomId()))} : '—'">—</td>
+                    <td th:text="${@fmt.money(m.share())}">₪0</td>
+                    <td><span class="pill" th:classappend="${'ms-' + m.status().name().toLowerCase()}" th:text="${@tr.memberStatus(m.status())}">Waiting</span></td>
+                    <td>
+                        <form th:if="${m.status().name() == 'PENDING' and group.status().name() == 'COLLECTING_PAYMENTS'}" method="post"
+                              th:action="@{/groups/{t}/members/{m}/remind(t=${token},m=${m.id()})}">
+                            <button class="btn small" type="submit" th:text="#{dash.remind}">Remind</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2><span th:text="#{dash.outbox}">Messages sent</span> <span class="muted small" th:text="#{dash.outboxNote}">(demo outbox)</span></h2>
+        <ul class="outbox">
+            <li th:each="n : ${outbox}">
+                <div class="ob-head"><strong th:text="${@tr.t(n.subject())}">Subject</strong>
+                    <span class="muted small"><span th:text="#{dash.to}">to</span> <span dir="ltr" th:text="${n.to()}">to</span> · <span th:text="${@fmt.time(n.sentAt())}">12:00</span></span></div>
+                <div th:text="${@tr.t(n.body())}">Body</div>
+                <div class="ob-links" th:if="${n.link() != null}">
+                    <a th:href="${n.link()}" th:text="${n.link().contains('/pay/')} ? #{dash.openPay} : #{dash.openDash}" target="_blank" rel="noopener">link</a>
+                    <button type="button" class="btn small ghost" th:attr="data-copy=${n.link()},data-copied=#{dash.copied}"><span aria-hidden="true">📋</span> <span th:text="#{dash.copy}">Copy link</span></button>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section class="card demo" th:if="${group.status().name() == 'COLLECTING_PAYMENTS'}">
+        <h2 th:text="#{dash.actions}">Organizer actions</h2>
+        <div class="actions">
+            <form method="post" th:action="@{/groups/{t}/demo/hotel-outage(t=${token})}">
+                <button class="btn ghost" type="submit" th:title="#{dash.outageHint}" th:text="#{dash.outage}">Demo: simulate hotel outage</button>
+            </form>
+            <form method="post" th:action="@{/groups/{t}/cancel(t=${token})}" th:attr="data-confirm=#{dash.cancelConfirm}" onsubmit="return confirm(this.dataset.confirm)">
+                <button class="btn danger" type="submit" th:text="#{dash.cancel}">Cancel booking</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script th:inline="javascript">
+(() => {
+  const finished = /*[[${group.status().isFinished()}]]*/ false;
+  // keep the page fresh while something can still change (but not while someone is using the accessibility menu)
+  if (!finished) setTimeout(function again() {
+    const panel = document.getElementById('a11yPanel');
+    if (panel && !panel.hidden) return setTimeout(again, 5000);
+    location.reload();
+  }, 15000);
+})();
+</script>
+</body>
+</html>

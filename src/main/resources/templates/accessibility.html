@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{access.title})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page legal">
+    <a th:href="@{/}" class="back" th:text="#{legal.back}">← Back to DiviStay</a>
+    <article class="card">
+        <h1 th:text="#{access.title}">Accessibility statement</h1>
+        <p class="muted small" th:text="#{legal.updated}">Last updated: October 2026</p>
+
+        <th:block th:if="${@tr.isHebrew()}">
+            <p class="lead-in">חשוב לנו שכל אחד יוכל להשתמש ב-DiviStay, כולל אנשים עם מוגבלות. האתר נבנה בהתאם להנחיות הנגישות לתכני אינטרנט <span dir="ltr">WCAG 2.1</span> ברמה AA, ולתקן הישראלי ת״י 5568.</p>
+            <h2>מה עשינו באתר</h2>
+            <ul>
+                <li><strong>תפריט נגישות</strong> (הכפתור העגול בפינת המסך): הגדלה והקטנה של טקסט, ניגודיות גבוהה, הדגשת קישורים, גופן קריא, עצירת אנימציות וסמן גדול. ההגדרות נשמרות בדפדפן שלך.</li>
+                <li>ניווט מלא במקלדת, עם מסגרת ברורה סביב הרכיב שבפוקוס, וקישור "דילוג לתוכן הראשי" בתחילת כל עמוד.</li>
+                <li>מבנה כותרות תקין, תוויות לכל שדה בטפסים, טקסט חלופי לתמונות, והודעות שגיאה שמוקראות על ידי קוראי מסך.</li>
+                <li>תמיכה בעברית מימין לשמאל ובאנגלית משמאל לימין, עם הגדרת שפה נכונה בכל עמוד.</li>
+                <li>מצב כהה, והתאמה לרכיבים ולמסכים בכל גודל, כולל טלפונים.</li>
+                <li>כיבוד הגדרת "הפחתת תנועה" של מערכת ההפעלה: אם היא מופעלת, האנימציות כבויות.</li>
+                <li>ניגודיות צבעים שנבדקה לטקסט ולכפתורים.</li>
+            </ul>
+            <h2>מגבלות ידועות</h2>
+            <ul>
+                <li>שדות התאריך משתמשים בבורר התאריכים של הדפדפן, ולכן ההתנהגות שלהם תלויה בדפדפן.</li>
+                <li>לוח הבקרה מתרענן אוטומטית כל 15 שניות כדי להציג תשלומים חדשים. בזמן שתפריט הנגישות פתוח, הרענון ממתין.</li>
+            </ul>
+            <h2>נתקלת בבעיה?</h2>
+            <p>אם משהו באתר לא נגיש עבורך, אשמח לשמוע ולתקן. אפשר לפנות לרכזת הנגישות, נויה אדיבי, <a th:href="${linkedin}" target="_blank" rel="noopener">בלינקדאין</a>. נא לציין באיזה עמוד מדובר, מה ניסית לעשות ובאיזה דפדפן או טכנולוגיה מסייעת השתמשת.</p>
+            <p class="muted small">זהו פרויקט סטודנטים להדגמה ולא שירות מסחרי.</p>
+        </th:block>
+
+        <th:block th:unless="${@tr.isHebrew()}">
+            <p class="lead-in">We want everyone to be able to use DiviStay, including people with disabilities. The site was built to follow WCAG 2.1 (the Web Content Accessibility Guidelines) at level AA and the Israeli standard IS 5568.</p>
+            <h2>What the site offers</h2>
+            <ul>
+                <li><strong>An accessibility menu</strong> (the round button in the corner): larger and smaller text, high contrast, highlighted links, a readable font, stopping animations and a big cursor. Your settings are saved in your browser.</li>
+                <li>Full keyboard navigation with a clear focus outline, and a "Skip to main content" link at the top of every page.</li>
+                <li>Proper heading structure, labels on every form field, alternative text for images, and error messages that screen readers announce.</li>
+                <li>Hebrew (right to left) and English (left to right), with the correct language set on every page.</li>
+                <li>Dark mode, and a layout that adapts to every screen size, including phones.</li>
+                <li>Respect for the system "reduce motion" setting: when it is on, animations are turned off.</li>
+                <li>Checked colour contrast for text and buttons.</li>
+            </ul>
+            <h2>Known limitations</h2>
+            <ul>
+                <li>Date fields use the browser's own date picker, so their behaviour depends on the browser.</li>
+                <li>The dashboard refreshes every 15 seconds to show new payments. While the accessibility menu is open, the refresh waits.</li>
+            </ul>
+            <h2>Found a problem?</h2>
+            <p>If something on the site isn't accessible to you, I'd like to hear about it and fix it. Contact the accessibility coordinator, Noya Adivi, <a th:href="${linkedin}" target="_blank" rel="noopener">on LinkedIn</a>. Please mention the page, what you were trying to do, and the browser or assistive technology you used.</p>
+            <p class="muted small">This is a student demo project, not a commercial service.</p>
+        </th:block>
+    </article>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

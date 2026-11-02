@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{privacy.title})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page legal">
+    <a th:href="@{/}" class="back" th:text="#{legal.back}">← Back to DiviStay</a>
+    <article class="card">
+        <h1 th:text="#{privacy.title}">Privacy policy</h1>
+        <p class="muted small" th:text="#{legal.updated}">Last updated: October 2026</p>
+
+        <th:block th:if="${@tr.isHebrew()}">
+            <p class="lead-in">DiviStay הוא פרויקט סטודנטים להדגמה. אין בו הזמנות אמיתיות, לא נשלחים מיילים אמיתיים ולא מתבצעים חיובים אמיתיים. המדיניות הזו מסבירה בפשטות איזה מידע האתר משתמש בו ולמה.</p>
+            <h2>איזה מידע נאסף</h2>
+            <ul>
+                <li><strong>שמות וכתובות מייל</strong> שהמארגן מקליד ביצירת קבוצה. הם משמשים רק להצגת הקבוצה ולבניית ההודעות לדוגמה בלוח הבקרה.</li>
+                <li><strong>פרטי כרטיס אשראי</strong> נבדקים לצורך ההדגמה ומועברים לספק תשלומים מדומה. מספר הכרטיס וה-CVC <strong>לא נשמרים</strong>. נשמרות רק 4 הספרות האחרונות, שמוצגות בהודעת האישור, ו"טביעת אצבע" חד-כיוונית קצרה של מספר הכרטיס, שממנה אי אפשר לשחזר אותו. היא משמשת כדי למנוע חיוב כפול. נא לא להזין כרטיס אמיתי, אלא רק את כרטיסי הבדיקה.</li>
+            </ul>
+            <h2>כמה זמן המידע נשמר</h2>
+            <p>כל המידע נשמר בזיכרון של השרת בלבד, לא במסד נתונים, והוא נמחק כשהשרת מופעל מחדש. אין גיבויים.</p>
+            <h2>עוגיות ואחסון בדפדפן</h2>
+            <ul>
+                <li>עוגייה אחת, <code dir="ltr">divistay-lang</code>, זוכרת את השפה שבחרת למשך שנה.</li>
+                <li>הדפדפן שלך שומר (ב-localStorage) את בחירת המצב הבהיר או הכהה ואת הגדרות הנגישות. המידע הזה נשאר אצלך במכשיר ולא נשלח לשרת.</li>
+                <li>אין באתר עוגיות פרסום, כלי מעקב או כלי סטטיסטיקה.</li>
+            </ul>
+            <h2>שירותים חיצוניים</h2>
+            <p>הגופנים נטענים מ-Google Fonts, ולכן Google רואה את כתובת ה-IP שלך כשהדף נטען. הקישורים ללינקדאין ולגיטהאב מובילים לאתרים חיצוניים עם מדיניות פרטיות משלהם.</p>
+            <h2>הזכויות שלך</h2>
+            <p>אפשר לבקש לעיין במידע או למחוק אותו. בפועל המידע נמחק ממילא כשהשרת מופעל מחדש. לשאלות אפשר לפנות אליי <a th:href="${linkedin}" target="_blank" rel="noopener">בלינקדאין</a>.</p>
+        </th:block>
+
+        <th:block th:unless="${@tr.isHebrew()}">
+            <p class="lead-in">DiviStay is a student demo project. There are no real bookings, no real emails and no real charges. This policy explains, in plain words, what information the site uses and why.</p>
+            <h2>What we collect</h2>
+            <ul>
+                <li><strong>Names and email addresses</strong> that the organizer types when creating a group. They are only used to show the group and to build the sample messages on the dashboard.</li>
+                <li><strong>Card details</strong> are validated for the demo and passed to a simulated payment provider. The card number and CVC are <strong>never stored</strong>; only the last 4 digits are kept, to show them in the confirmation message, together with a short one-way fingerprint of the card number that cannot be turned back into it. The fingerprint prevents double charges. Please don't enter a real card, only the test cards.</li>
+            </ul>
+            <h2>How long it is kept</h2>
+            <p>Everything is kept in the server's memory only, not in a database, and is deleted when the server restarts. There are no backups.</p>
+            <h2>Cookies and browser storage</h2>
+            <ul>
+                <li>One cookie, <code>divistay-lang</code>, remembers your language for a year.</li>
+                <li>Your browser saves (in localStorage) your light or dark mode and accessibility settings. This stays on your device and is never sent to the server.</li>
+                <li>There are no advertising cookies, trackers or analytics.</li>
+            </ul>
+            <h2>Third parties</h2>
+            <p>Fonts are loaded from Google Fonts, so Google sees your IP address when the page loads. The LinkedIn and GitHub links lead to outside sites with their own privacy policies.</p>
+            <h2>Your rights</h2>
+            <p>You can ask to see or delete your information; in practice it is deleted anyway when the server restarts. For any question, contact me <a th:href="${linkedin}" target="_blank" rel="noopener">on LinkedIn</a>.</p>
+        </th:block>
+    </article>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

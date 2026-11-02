@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:fragment="head(title)">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#FBF6EF" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1A2230" media="(prefers-color-scheme: dark)">
+    <title th:text="${title} + ' · DiviStay'">DiviStay</title>
+    <!-- apply the saved theme and accessibility settings before the page paints (no flash) -->
+    <script>
+        (function () {
+            var d = document.documentElement;
+            try {
+                var t = localStorage.getItem('ds-theme');
+                if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                d.setAttribute('data-theme', t);
+                var a = JSON.parse(localStorage.getItem('ds-a11y') || '{}');
+                ['contrast', 'links', 'font', 'motion', 'cursor'].forEach(function (k) { if (a[k]) d.classList.add('a11y-' + k); });
+                if (a.size) d.style.fontSize = (100 + a.size * 12.5) + '%';
+            } catch (e) { d.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+    <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<header th:fragment="header" class="topbar">
+    <a class="skip" href="#main" th:text="#{skip}">Skip to main content</a>
+    <div class="wrap topbar-inner">
+        <a th:href="@{/}" class="brand" th:aria-label="#{nav.home}">
+            <img class="logo-light" th:src="@{/img/emblem.png}" src="/img/emblem.png" alt="" width="48" height="37">
+            <img class="logo-dark" th:src="@{/img/emblem-dark.png}" src="/img/emblem-dark.png" alt="" width="48" height="37">
+            <span class="wordmark" dir="ltr"><span class="divi">Divi</span><span class="stay">Stay</span></span>
+        </a>
+        <nav class="mainnav" th:aria-label="#{nav.menu}">
+            <details class="menu-toggle">
+                <summary th:aria-label="#{nav.menu}"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span> <span class="menu-word" th:text="#{nav.menu}">Menu</span></summary>
+            </details>
+            <ul class="menu-links">
+                <li><a th:href="@{/}" th:text="#{nav.homeLink}">Home</a></li>
+                <li><a th:href="@{/destinations}" th:text="#{nav.destinations}">Destinations</a></li>
+                <li><a th:href="@{/search}" th:text="#{nav.hotels}">Hotels</a></li>
+                <li><a th:href="@{/} + '#how'" th:text="#{nav.how}">How it works</a></li>
+                <li><a th:href="@{/} + '#faq'" th:text="#{nav.faq}">Questions</a></li>
+                <li><a th:href="${linkedin} ?: 'https://www.linkedin.com/in/noya-adivi'" target="_blank" rel="noopener" th:text="#{nav.contact}">Contact</a></li>
+            </ul>
+        </nav>
+        <nav class="tools">
+            <a class="tool lang" th:href="${@tr.lang() == 'en'} ? (${langUrlHe} ?: '?lang=he') : (${langUrlEn} ?: '?lang=en')"
+               th:lang="${@tr.lang() == 'en'} ? 'he' : 'en'" th:title="#{nav.langLabel}" th:aria-label="#{nav.langLabel}">
+                <span aria-hidden="true">🌐</span> <span th:text="#{nav.lang}">עברית</span>
+            </a>
+            <button class="tool theme" type="button" id="themeToggle" th:aria-label="#{nav.theme}" th:title="#{nav.theme}" aria-pressed="false">
+                <span class="sun" aria-hidden="true">☀️</span><span class="moon" aria-hidden="true">🌙</span>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<!-- the search box: where, when, who's coming, and how many split the bill -->
+<form th:fragment="searchbox(city, checkIn, checkOut, guests, today, extraClass)" th:class="'search3 ' + ${extraClass}"
+      th:action="@{/search}" method="get" role="search" th:aria-label="#{search.submit}">
+    <label class="sb-field sb-where">
+        <span class="sb-label"><span aria-hidden="true">📍</span> <span th:text="#{search.where}">Where to?</span></span>
+        <input name="city" list="destList" th:value="${city}" th:placeholder="#{search.wherePlaceholder}" autocomplete="off">
+        <datalist id="destList">
+            <option th:each="d : ${destinations}" th:value="${@tr.isHebrew()} ? ${d.nameHe()} : ${d.name()}"
+                    th:text="${@tr.country(d.country())}">City</option>
+        </datalist>
+    </label>
+    <label class="sb-field">
+        <span class="sb-label"><span aria-hidden="true">🛬</span> <span th:text="#{search.checkIn}">Check-in</span></span>
+        <input type="date" name="checkIn" class="js-in" required th:value="${checkIn}" th:min="${today}">
+    </label>
+    <label class="sb-field">
+        <span class="sb-label"><span aria-hidden="true">🛫</span> <span th:text="#{search.checkOut}">Check-out</span></span>
+        <input type="date" name="checkOut" class="js-out" required th:value="${checkOut}" th:min="${today}">
+    </label>
+    <details class="sb-field sb-guests">
+        <summary>
+            <span class="sb-label"><span aria-hidden="true">👥</span> <span th:text="#{search.who}">Who's coming</span></span>
+            <span class="sb-guests-text" th:text="${@tr.guests(guests.adults(), guests.children())} + ' · ' + ${@tr.payers(guests.payers())}">2 adults · split between 2</span>
+        </summary>
+        <div class="sb-pop" th:attr="data-adults1=#{guests.oneAdult},data-adults=#{guests.adults},data-child1=#{guests.oneChild},data-children=#{guests.children},data-payers=#{guests.payers},data-age=#{guests.age},data-age-label=#{guests.childAge}">
+            <div class="cnt-row">
+                <div><b th:text="#{guests.adultsLabel}">Adults</b><small th:text="#{guests.adultsHint}">18 and over</small></div>
+                <div class="counter" data-name="adults" data-min="1" data-max="16">
+                    <button type="button" data-d="-1" th:aria-label="#{calc.less}">−</button>
+                    <output th:text="${guests.adults()}">2</output>
+                    <input type="hidden" name="adults" th:value="${guests.adults()}">
+                    <button type="button" data-d="1" th:aria-label="#{calc.more}">+</button>
+                </div>
+            </div>
+            <div class="cnt-row">
+                <div><b th:text="#{guests.childrenLabel}">Children</b><small th:text="#{guests.childrenHint}">0–17</small></div>
+                <div class="counter" data-name="children" data-min="0" data-max="10">
+                    <button type="button" data-d="-1" th:aria-label="#{calc.less}">−</button>
+                    <output th:text="${guests.children()}">0</output>
+                    <button type="button" data-d="1" th:aria-label="#{calc.more}">+</button>
+                </div>
+            </div>
+            <div class="ages">
+                <label th:each="age, i : ${guests.childAges()}"><span th:text="#{guests.childAge} + ' ' + ${i.count}">Child 1 age</span>
+                    <select name="ages"><option th:each="a : ${#numbers.sequence(0, 17)}" th:value="${a}" th:text="${a}" th:selected="${a == age}">0</option></select>
+                </label>
+            </div>
+            <div class="cnt-row payers-row">
+                <div><b th:text="#{guests.payersLabel}">How many pay?</b><small th:text="#{guests.payersHint}">The bill is split between them</small></div>
+                <div class="counter" data-name="payers" data-min="1" data-max="30">
+                    <button type="button" data-d="-1" th:aria-label="#{calc.less}">−</button>
+                    <output th:text="${guests.payers()}">2</output>
+                    <input type="hidden" name="payers" th:value="${guests.payers()}">
+                    <button type="button" data-d="1" th:aria-label="#{calc.more}">+</button>
+                </div>
+            </div>
+            <p class="small muted" th:text="#{guests.babyNote}">Babies under 2 sleep in a free cot.</p>
+            <button type="button" class="btn small sb-done" th:text="#{guests.done}">Done</button>
+        </div>
+    </details>
+    <button class="btn primary sb-go" type="submit"><span aria-hidden="true">🔍</span> <span th:text="#{search.submit}">Search</span></button>
+</form>
+
+<footer th:fragment="footer" class="footer">
+    <div class="wrap footer-grid">
+        <div class="footer-brand">
+            <img class="logo-light" th:src="@{/img/emblem.png}" src="/img/emblem.png" alt="">
+            <img class="logo-dark" th:src="@{/img/emblem-dark.png}" src="/img/emblem-dark.png" alt="">
+            <div>
+                <div th:text="#{footer.demo}">DiviStay demo</div>
+                <div class="small" th:text="#{footer.credit}">Designed by Noya, Amit and Amir</div>
+            </div>
+        </div>
+        <nav class="footer-links">
+            <a th:href="@{/privacy}" th:text="#{footer.privacy}">Privacy</a>
+            <a th:href="@{/terms}" th:text="#{footer.terms}">Terms of use</a>
+            <a th:href="@{/accessibility}" th:text="#{footer.accessibility}">Accessibility</a>
+            <a th:href="${linkedin} ?: 'https://www.linkedin.com/in/noya-adivi'" href="https://www.linkedin.com/in/noya-adivi" target="_blank" rel="noopener" class="linkedin">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+                <span th:text="#{footer.contact}">Contact on LinkedIn</span>
+            </a>
+            <a href="https://github.com/NoyaAdivi/DiviStay" target="_blank" rel="noopener" th:text="#{footer.source}">Source on GitHub</a>
+            <span class="small muted footer-photos" th:utext="#{footer.photos}">Photos: Unsplash</span>
+        </nav>
+    </div>
+
+    <!-- accessibility menu -->
+    <button type="button" class="a11y-btn" id="a11yBtn" aria-controls="a11yPanel" aria-expanded="false" th:aria-label="#{a11y.open}" th:title="#{a11y.open}">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="12" cy="4" r="2.2" fill="currentColor"/><path fill="currentColor" d="M19.5 7.6 14.6 8.4v3.1l1.9 7.9a1.1 1.1 0 0 1-2.1.5L12.6 14h-1.2l-1.8 5.9a1.1 1.1 0 0 1-2.1-.5l1.9-7.9V8.4L4.5 7.6a1 1 0 1 1 .3-2l5.4.9h3.6l5.4-.9a1 1 0 1 1 .3 2Z"/></svg>
+    </button>
+    <section class="a11y-panel" id="a11yPanel" role="dialog" aria-modal="false" aria-labelledby="a11yTitle" hidden>
+        <div class="a11y-head">
+            <h2 id="a11yTitle" th:text="#{a11y.title}">Accessibility</h2>
+            <button type="button" class="a11y-close" data-a11y="close" th:aria-label="#{a11y.close}">✕</button>
+        </div>
+        <div class="a11y-size" role="group" th:aria-label="#{a11y.textSize}">
+            <span th:text="#{a11y.textSize}">Text size</span>
+            <button type="button" data-a11y="smaller" th:aria-label="#{a11y.smaller}">A−</button>
+            <output id="a11ySize" aria-live="polite">100%</output>
+            <button type="button" data-a11y="bigger" th:aria-label="#{a11y.bigger}">A+</button>
+        </div>
+        <div class="a11y-grid">
+            <button type="button" data-a11y="contrast" aria-pressed="false"><span aria-hidden="true">◐</span> <span th:text="#{a11y.contrast}">High contrast</span></button>
+            <button type="button" data-a11y="links" aria-pressed="false"><span aria-hidden="true">🔗</span> <span th:text="#{a11y.links}">Highlight links</span></button>
+            <button type="button" data-a11y="font" aria-pressed="false"><span aria-hidden="true">Aa</span> <span th:text="#{a11y.font}">Readable font</span></button>
+            <button type="button" data-a11y="motion" aria-pressed="false"><span aria-hidden="true">⏸</span> <span th:text="#{a11y.motion}">Stop animations</span></button>
+            <button type="button" data-a11y="cursor" aria-pressed="false"><span aria-hidden="true">➚</span> <span th:text="#{a11y.cursor}">Big cursor</span></button>
+            <button type="button" data-a11y="reset"><span aria-hidden="true">↺</span> <span th:text="#{a11y.reset}">Reset settings</span></button>
+        </div>
+        <a class="a11y-link" th:href="@{/accessibility}" th:text="#{a11y.statement}">Accessibility statement</a>
+    </section>
+
+    <script th:src="@{/app.js}" src="/app.js"></script>
+</footer>
+
+</body>
+</html>

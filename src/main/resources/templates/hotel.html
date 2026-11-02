@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(${@tr.hotelName(availability.hotel())})}"></head>
+<body class="hotel-page">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page" th:with="hotel=${availability.hotel()}">
+    <a th:href="@{/search(checkIn=${stay.checkIn()},checkOut=${stay.checkOut()},city=${hotel.city()},adults=${guests.adults()},ages=${guests.childAges()},payers=${guests.payers()})}" class="back" th:text="#{hotel.back}">← Other hotels</a>
+
+    <!-- ============ HOTEL HEADER ============ -->
+    <div class="hotel-top">
+        <div>
+            <div class="hotel-city"><span th:text="${@tr.city(hotel.city())}">City</span><span th:if="${!hotel.address().isBlank()}"> · <span th:text="${hotel.address()}" dir="auto">Street</span></span>
+                <a th:if="${hotel.real()}" class="map-link" th:href="${hotel.mapUrl()}" target="_blank" rel="noopener"><span aria-hidden="true">🗺️</span> <span th:text="#{hotel.onMap}">On the map</span></a></div>
+            <h1><span th:text="${@tr.hotelName(hotel)}">Hotel</span>
+                <span class="stars" th:text="${#strings.repeat('★', hotel.stars())}" th:aria-label="#{hotel.starsLabel(${hotel.stars()})}">★★★★</span></h1>
+            <p class="muted">
+                <span th:text="${@fmt.date(stay.checkIn())}">in</span> – <span th:text="${@fmt.date(stay.checkOut())}">out</span> ·
+                <span th:text="${@tr.nights(stay.nights())}">2 nights</span> ·
+                <span th:text="${@tr.guests(guests.adults(), guests.children())}">2 adults</span>
+            </p>
+        </div>
+        <div class="score-box big">
+            <span><b th:text="${@tr.ratingWord(hotel)}">Superb</b><small th:text="${@tr.reviews(hotel.reviews())}">812 reviews</small></span>
+            <span class="score"><b th:text="${hotel.ratingText()}">9.1</b></span>
+        </div>
+    </div>
+
+    <div class="gallery" data-gallery>
+        <button type="button" th:each="src, i : ${@photos.gallery(hotel)}" th:class="'g-shot g' + ${i.index}" th:attr="data-full=${src}"
+                th:aria-label="#{hotel.photo(${i.count}, ${@photos.gallery(hotel).size()})}">
+            <img class="ph" th:src="${src}" alt="" th:attr="loading=${i.index == 0} ? 'eager' : 'lazy'">
+            <span class="g-more" th:if="${i.last}"><span aria-hidden="true">📷</span> <span th:text="#{hotel.allPhotos}">All photos</span></span>
+        </button>
+    </div>
+
+    <p class="hotel-desc" th:text="${@tr.hotelDescription(hotel)}">Description</p>
+    <p class="demo-note" th:if="${hotel.real()}"><span aria-hidden="true">ℹ️</span> <span th:utext="#{hotel.realNote}">A real hotel from OpenStreetMap. Rooms, prices, reviews and photos are simulated for the demo.</span></p>
+    <ul class="amen-list" th:aria-label="#{filter.amenities}">
+        <li th:each="a : ${hotel.amenityList()}"><span aria-hidden="true" th:text="${a.emoji()}">📶</span> <span th:text="${@tr.amenity(a)}">Wi-Fi</span></li>
+    </ul>
+
+    <div th:if="${error}" class="alert error" role="alert" th:text="${@tr.t(error)}">Error</div>
+
+    <p th:if="${availability.freeRooms().isEmpty()}" class="card empty">
+        <span th:text="#{hotel.allTaken}">All rooms are taken for these dates.</span> <a th:href="@{/}" th:text="#{hotel.tryOther}">Try other dates</a>
+    </p>
+
+    <!-- ============ STEPS (dots fill in as each step is done) ============ -->
+    <nav class="stepper-dots" aria-label="Steps" th:aria-label="#{steps.label}" th:unless="${availability.freeRooms().isEmpty()}" id="stepDots">
+        <a href="#step-rooms" data-step="rooms"><span class="sd-dot" aria-hidden="true"><i>1</i></span><span class="sd-text" th:text="#{hotel.step1}">Choose rooms</span></a>
+        <a href="#step-you" data-step="organizer"><span class="sd-dot" aria-hidden="true"><i>2</i></span><span class="sd-text" th:text="#{hotel.step2}">About you</span></a>
+        <a href="#step-people" data-step="people"><span class="sd-dot" aria-hidden="true"><i>3</i></span><span class="sd-text" th:text="#{hotel.step4}">Who's coming</span></a>
+        <a href="#step-split" data-step="split"><span class="sd-dot" aria-hidden="true"><i>4</i></span><span class="sd-text" th:text="#{hotel.step3}">How to split</span></a>
+    </nav>
+
+    <div class="booking-layout" th:unless="${availability.freeRooms().isEmpty()}">
+    <form method="post" id="groupForm" th:action="@{/hotels/{id}/groups(id=${hotel.id()})}">
+        <input type="hidden" name="checkIn" th:value="${stay.checkIn()}">
+        <input type="hidden" name="checkOut" th:value="${stay.checkOut()}">
+
+        <!-- 1. rooms -->
+        <fieldset class="card bstep" id="step-rooms" data-step="rooms">
+            <legend class="h2"><span class="num" aria-hidden="true">1</span> <span th:text="#{hotel.step1}">Choose rooms</span> <span class="step-dot" aria-hidden="true"></span></legend>
+            <p class="hint" th:if="${!form.roomIds.isEmpty()}"><span aria-hidden="true">✨</span> <span th:text="#{hotel.preselected(${guests.total()})}">We picked the cheapest rooms that sleep everyone. Change anything you like.</span></p>
+            <div class="rtypes">
+                <article class="rtype" th:each="g : ${roomGroups}" th:attr="data-type=${g.type()},data-cost=${g.stayPrice()},data-capacity=${g.sleeps()}">
+                    <div class="rt-photos">
+                        <img th:each="src, i : ${@photos.room(hotel, g.type())}" th:src="${src}" alt="" loading="lazy"
+                             th:class="'ph' + (${i.index == 0} ? ' on' : '')">
+                        <div class="rt-dots">
+                            <button type="button" class="rt-dot" th:each="src, i : ${@photos.room(hotel, g.type())}" th:aria-pressed="${i.index == 0}"
+                                    th:aria-label="#{hotel.photo(${i.count}, 3)}"></button>
+                        </div>
+                    </div>
+                    <div class="rt-body">
+                        <h3 th:text="${@tr.roomType(g.type())}">Family room</h3>
+                        <p class="muted small" th:text="${@tr.roomTypeDescription(g.type())}">Description</p>
+                        <ul class="rt-facts">
+                            <li><span aria-hidden="true">👤</span> <span th:text="#{hotel.sleeps(${g.sleeps()})}">Sleeps 4</span></li>
+                            <li><span aria-hidden="true">🛏️</span> <span th:text="${@tr.roomTypeBeds(g.type())}">1 double + 2 single beds</span></li>
+                            <li class="left" th:classappend="${g.rooms().size() <= 2} ? 'few'"><span aria-hidden="true">🔥</span> <span th:text="#{hotel.left(${g.rooms().size()})}">3 left</span></li>
+                        </ul>
+                        <div class="rt-buy">
+                            <div class="rt-price">
+                                <b dir="ltr" th:text="${@fmt.money(g.nightly())}">₪0</b> <span class="muted small" th:text="#{hotel.perNight}">/ night</span>
+                                <small class="muted"><span dir="ltr" th:text="${@fmt.money(g.stayPrice())}">₪0</span> <span th:text="#{hotel.total}">total</span></small>
+                            </div>
+                            <div class="counter rt-count" th:attr="data-max=${g.rooms().size()}" role="group" th:aria-label="#{hotel.howMany} + ' – ' + ${@tr.roomType(g.type())}">
+                                <button type="button" data-d="-1" th:aria-label="#{calc.less}">−</button>
+                                <output th:text="${g.chosen()}" aria-live="polite">0</output>
+                                <button type="button" data-d="1" th:aria-label="#{calc.more}">+</button>
+                            </div>
+                        </div>
+                        <details class="rt-numbers">
+                            <summary th:text="#{hotel.pickNumbers}">Choose specific rooms</summary>
+                            <div class="room-pills">
+                                <label class="pill-check" th:each="room : ${g.rooms()}">
+                                    <input type="checkbox" name="roomIds" th:value="${room.id()}" th:checked="${form.roomIds.contains(room.id())}"
+                                           th:attr="data-cost=${room.priceFor(stay)},data-capacity=${room.capacity()},data-label=${@tr.room(room)}">
+                                    <span th:text="${room.number()}">101</span>
+                                </label>
+                            </div>
+                        </details>
+                    </div>
+                </article>
+            </div>
+            <p class="total-line" aria-live="polite">
+                <span><span th:text="#{hotel.totalLabel}">Total</span> <strong id="total" dir="ltr">₪0.00</strong></span><span class="muted" aria-hidden="true">·</span>
+                <span><span th:text="#{hotel.sleepsLabel}">sleeps</span> <strong id="capacity">0</strong></span>
+            </p>
+        </fieldset>
+
+        <!-- 2. organizer -->
+        <fieldset class="card bstep" id="step-you" data-step="organizer">
+            <legend class="h2"><span class="num" aria-hidden="true">2</span> <span th:text="#{hotel.step2}">About you</span> <span class="step-dot" aria-hidden="true"></span></legend>
+            <div class="row2">
+                <label><span th:text="#{hotel.yourName}">Your name</span> <input name="organizerName" th:value="${form.organizerName}" required autocomplete="name" id="orgName"></label>
+                <label><span th:text="#{hotel.yourEmail}">Your email</span> <input type="email" dir="ltr" name="organizerEmail" th:value="${form.organizerEmail}" required autocomplete="email" id="orgEmail"></label>
+            </div>
+            <p class="hint" th:text="#{hotel.step2Hint}">You'll get a private dashboard link…</p>
+        </fieldset>
+
+        <!-- 3. people: first how many, then one row each -->
+        <fieldset class="card bstep" id="step-people" data-step="people">
+            <legend class="h2"><span class="num" aria-hidden="true">3</span> <span th:text="#{hotel.step4}">Who's coming</span> <span class="step-dot" aria-hidden="true"></span></legend>
+            <div class="people-count">
+                <div>
+                    <b th:text="#{hotel.howManyPeople}">How many people are paying, including you?</b>
+                    <small class="muted" th:text="#{hotel.howManyHint}">Each one gets a personal payment link by email.</small>
+                </div>
+                <div class="counter big" id="peopleCounter" data-min="1" th:attr="data-max=${form.members.size()}">
+                    <button type="button" data-d="-1" th:aria-label="#{calc.less}">−</button>
+                    <output id="peopleOut" th:text="${form.people}" aria-live="polite">2</output>
+                    <input type="hidden" name="people" id="peopleInput" th:value="${form.people}">
+                    <button type="button" data-d="1" th:aria-label="#{calc.more}">+</button>
+                </div>
+            </div>
+            <p class="kids-note small muted" th:if="${guests.children() > 0}">
+                <span aria-hidden="true">🧒</span> <span th:text="#{hotel.kidsNote(${guests.children()}, ${guests.agesCsv()})}">Also travelling: 2 children (ages 4, 9)</span>
+            </p>
+            <div class="members" id="members">
+                <div class="member-row" th:each="m, i : ${form.members}" th:attr="data-index=${i.index}">
+                    <span class="m-badge" aria-hidden="true" th:text="${i.count}">1</span>
+                    <input th:name="|members[${i.index}].name|" th:value="${m.name}" th:placeholder="#{form.name}" th:aria-label="#{form.name} + ' ' + ${i.count}" autocomplete="off">
+                    <input type="email" dir="ltr" th:name="|members[${i.index}].email|" th:value="${m.email}" th:placeholder="#{form.email}" th:aria-label="#{form.email} + ' ' + ${i.count}" autocomplete="off">
+                    <select class="col-room" th:name="|members[${i.index}].roomId|" th:aria-label="#{th.room} + ' ' + ${i.count}">
+                        <option value="" th:text="#{form.room}">Room…</option>
+                        <option th:each="room : ${availability.freeRooms()}" th:value="${room.id()}" th:text="${@tr.room(room)}"
+                                th:selected="${room.id() == m.roomId}">Room</option>
+                    </select>
+                    <input class="col-amount" inputmode="decimal" dir="ltr" th:name="|members[${i.index}].amount|" th:value="${m.amount}" th:placeholder="#{form.amount}" th:aria-label="#{form.amount} + ' ' + ${i.count}">
+                    <button type="button" class="row-remove" th:aria-label="#{hotel.removePerson(${i.count})}" th:title="#{hotel.removePerson(${i.count})}">×</button>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- 4. split -->
+        <fieldset class="card bstep" id="step-split" data-step="split">
+            <legend class="h2"><span class="num" aria-hidden="true">4</span> <span th:text="#{hotel.step3}">How to split the cost</span> <span class="step-dot" aria-hidden="true"></span></legend>
+            <div class="split-options">
+                <label class="split" th:each="t : ${splitTypes}">
+                    <input type="radio" name="splitType" th:value="${t}" th:checked="${form.splitType == t}">
+                    <span><strong><span aria-hidden="true" th:text="${t.name() == 'EQUAL'} ? '🟰' : (${t.name() == 'ROOM_BASED'} ? '🛏️' : '✏️')">🟰</span> <span th:text="${@tr.split(t)}">Equal</span></strong><span class="muted" th:text="${@tr.splitDescription(t)}">desc</span></span>
+                </label>
+            </div>
+            <p class="hint split-hint" id="splitHint"></p>
+        </fieldset>
+
+        <button class="btn primary big" type="submit" th:text="#{hotel.submit}">Hold rooms &amp; send payment links</button>
+        <p class="hint center" th:text="#{hotel.submitHint}">Rooms are held for 30 minutes…</p>
+    </form>
+
+    <aside class="summary card" aria-labelledby="sumTitle" th:attr="data-person=#{calc.person},data-room-needed=#{sum.roomNeeded},data-left=#{sum.left},data-over=#{sum.over},data-exact=#{sum.exact},data-hint-room=#{hotel.hintRoom},data-hint-custom=#{hotel.hintCustom},data-hint-equal=#{hotel.hintEqual}">
+        <div class="sum-photo"><img class="ph" th:src="${@photos.thumb(hotel, 0)}" alt=""></div>
+        <h2 id="sumTitle" class="h2" th:text="#{sum.title}">Your booking</h2>
+        <p class="muted small sum-dates">
+            <b th:text="${@tr.hotelName(hotel)}">Hotel</b><br>
+            <span th:text="${@fmt.date(stay.checkIn())}">in</span> – <span th:text="${@fmt.date(stay.checkOut())}">out</span> · <span th:text="${@tr.nights(stay.nights())}">2 nights</span>
+        </p>
+        <ul class="sum-rooms" id="sumRooms" th:attr="data-empty=#{sum.noRooms}"><li class="muted" th:text="#{sum.noRooms}">No rooms chosen yet</li></ul>
+        <div class="sum-total"><span th:text="#{hotel.totalLabel}">Total</span> <strong id="sumTotal" dir="ltr">₪0</strong></div>
+        <div class="beds">
+            <div class="beds-head"><span th:text="#{sum.beds}">People / beds</span> <b id="bedsText" dir="ltr">0 / 0</b></div>
+            <div class="beds-bar"><span id="bedsBar"></span></div>
+            <p class="beds-warn" id="bedsWarn" hidden th:text="#{sum.tooMany}">More people than beds: add a room.</p>
+        </div>
+        <h3 class="h3 sum-sub" th:text="#{sum.perPerson}">Each person pays</h3>
+        <ul class="sum-shares" id="sumShares" aria-live="polite"></ul>
+        <p class="sum-note" id="sumNote"></p>
+        <ol class="checklist" id="checklist">
+            <li data-check="rooms" th:text="#{sum.check.rooms}">Rooms chosen</li>
+            <li data-check="organizer" th:text="#{sum.check.organizer}">Your details</li>
+            <li data-check="people" th:text="#{sum.check.people}">At least one person</li>
+        </ol>
+        <button class="btn primary big" type="submit" form="groupForm" th:text="#{hotel.submit}">Hold rooms &amp; send payment links</button>
+    </aside>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:src="@{/hotel.js}" src="/hotel.js"></script>
+</body>
+</html>

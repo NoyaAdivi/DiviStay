@@ -1,0 +1,10 @@
+# One-click setup on Render (render.com): New → Blueprint → choose this repository.
+services:
+  - type: web
+    name: divistay
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: THYMELEAF_CACHE
+        value: "true"

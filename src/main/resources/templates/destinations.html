@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{destinations.title})}"></head>
+<body class="dest-page">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1">
+    <section class="search-band dest-hero">
+        <div class="wrap">
+            <span class="eyebrow" th:text="#{dest.eyebrow}">Where to?</span>
+            <h1 th:text="#{destinations.title}">Destinations</h1>
+            <p class="lead" th:text="#{destinations.lead(${#numbers.formatInteger(hotelCount, 1, 'COMMA')}, ${groups.size()})}">12,000 real hotels in 21 countries.</p>
+            <nav class="country-chips" th:aria-label="#{destinations.jump}">
+                <a th:each="g : ${groups}" th:href="'#c-' + ${g.country()}" class="cchip">
+                    <span th:text="${@tr.country(g.country())}">Greece</span> <small th:text="${g.hotels()}">1200</small></a>
+            </nav>
+        </div>
+    </section>
+
+    <div class="wrap">
+        <section class="country" th:each="g, gi : ${groups}" th:id="'c-' + ${g.country()}" th:style="'--i:' + ${gi.index}">
+            <div class="country-head">
+                <h2 th:text="${@tr.country(g.country())}">Greece</h2>
+                <a class="btn primary small"
+                   th:href="@{/search(city=${@tr.country(g.country())},checkIn=${defaultCheckIn},checkOut=${defaultCheckOut})}"
+                   th:text="#{destinations.allIn(${@tr.country(g.country())}, ${#numbers.formatInteger(g.hotels(), 1, 'COMMA')})}">All 1,200 hotels in Greece →</a>
+            </div>
+            <div class="city-grid">
+                <a class="city-card" th:each="c : ${g.cities()}"
+                   th:href="@{/search(city=${c.destination().name()},checkIn=${defaultCheckIn},checkOut=${defaultCheckOut})}">
+                    <span class="city-photo" th:if="${@photos.hasCity(c.destination().key())}">
+                        <img class="ph" th:src="${@photos.city(c.destination().key(), false)}" alt="" loading="lazy"></span>
+                    <span class="city-photo city-initial" th:unless="${@photos.hasCity(c.destination().key())}" aria-hidden="true"
+                          th:text="${#strings.substring(@tr.city(c.destination().name()), 0, 1)}">R</span>
+                    <span class="city-text">
+                        <b th:text="${@tr.city(c.destination().name())}">Rome</b>
+                        <small th:text="#{dest.count(${c.hotels()})}">300 hotels</small>
+                        <small class="muted"><span th:text="#{hotels.from}">from</span> <span dir="ltr" th:text="${@fmt.money(c.fromNightly())}">₪300</span></small>
+                    </span>
+                </a>
+            </div>
+        </section>
+        <p class="demo-note small"><span aria-hidden="true">ℹ️</span> <span th:utext="#{search.realNote}">Real hotels from OpenStreetMap.</span></p>
+    </div>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

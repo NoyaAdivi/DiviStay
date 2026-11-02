@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{index.title})}"></head>
+<body class="home">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1">
+
+    <!-- ============ HERO: the logo assembles itself ============ -->
+    <section class="hero2" aria-labelledby="heroTitle">
+        <span class="blob b1" aria-hidden="true"></span><span class="blob b2" aria-hidden="true"></span><span class="blob b3" aria-hidden="true"></span>
+        <div class="wrap hero2-inner">
+            <div class="brand-stage" id="brandStage" role="img" aria-label="DiviStay – Split your payments, enjoy your stay">
+                <div class="logo-stack" id="logoStack">
+                    <img class="ly ly-arcL" th:src="@{/img/logo/arcL.png}" src="/img/logo/arcL.png" alt="" data-depth="6">
+                    <img class="ly ly-arcR" th:src="@{/img/logo/arcR.png}" src="/img/logo/arcR.png" alt="" data-depth="6">
+                    <img class="ly ly-building" th:src="@{/img/logo/building.png}" src="/img/logo/building.png" alt="" data-depth="12">
+                    <img class="ly ly-cardG" th:src="@{/img/logo/cardG.png}" src="/img/logo/cardG.png" alt="" data-depth="24">
+                    <img class="ly ly-cardP" th:src="@{/img/logo/cardP.png}" src="/img/logo/cardP.png" alt="" data-depth="24">
+                    <img class="ly ly-word" th:src="@{/img/logo/word.png}" src="/img/logo/word.png" alt="" data-depth="4">
+                    <img class="ly ly-tag" th:src="@{/img/logo/tag.png}" src="/img/logo/tag.png" alt="" data-depth="2">
+                </div>
+                <span class="spark s1" aria-hidden="true"></span><span class="spark s2" aria-hidden="true"></span><span class="spark s3" aria-hidden="true"></span>
+                <span class="chip-float c1" aria-hidden="true"><span class="dot"></span> <span th:text="#{hero.chip1}">Rooms held · 30:00</span></span>
+                <span class="chip-float c2" aria-hidden="true">💳 <span th:text="#{hero.chip2}">3 of 4 paid</span></span>
+                <span class="chip-float c3" aria-hidden="true">✅ <span th:text="#{hero.chip3}">Confirmed</span></span>
+            </div>
+
+            <div class="hero2-copy">
+                <h1 id="heroTitle"><span th:text="#{hero.title1}">Book rooms as a group.</span>
+                    <span class="hl" th:text="#{hero.highlight}">Everyone pays</span> <span th:text="#{hero.title2}">their own share.</span></h1>
+                <p class="lead" th:text="#{hero.lead}">The organizer picks the rooms…</p>
+
+                <div th:replace="~{fragments :: searchbox('', ${defaultCheckIn}, ${defaultCheckOut}, ${guests}, ${today}, 'search3-hero')}"></div>
+                <ul class="trust">
+                    <li><span aria-hidden="true">🔒</span> <span th:text="#{trust.1}">Rooms locked for 30 minutes</span></li>
+                    <li><span aria-hidden="true">🛡️</span> <span th:text="#{trust.2}">No one is charged unless everyone pays</span></li>
+                    <li><span aria-hidden="true">⚡</span> <span th:text="#{trust.3}">Personal, secure payment links</span></li>
+                    <li><span aria-hidden="true">🏨</span> <span th:text="#{trust.hotels(${#numbers.formatInteger(hotelCount, 1, 'COMMA')}, ${destinations.size()})}">12,004 hotels in 60 destinations</span></li>
+                </ul>
+            </div>
+        </div>
+        <a href="#how" class="scroll-cue" th:aria-label="#{how.title}"><span></span></a>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="wrap section" id="how" aria-labelledby="howTitle">
+        <div class="section-head">
+            <span class="eyebrow" th:text="#{how.eyebrow}">How it works</span>
+            <h2 id="howTitle" th:text="#{how.title}">Four steps, zero awkward money talk</h2>
+        </div>
+        <ol class="timeline">
+            <li class="t-step"><span class="t-num">1</span><div class="ic" aria-hidden="true">🛏️</div><h3 th:text="#{steps.1.title}">Pick rooms</h3><p th:text="#{steps.1.text}">…</p></li>
+            <li class="t-step"><span class="t-num">2</span><div class="ic" aria-hidden="true">➗</div><h3 th:text="#{steps.2.title}">Split the cost</h3><p th:text="#{steps.2.text}">…</p></li>
+            <li class="t-step"><span class="t-num">3</span><div class="ic" aria-hidden="true">💳</div><h3 th:text="#{steps.3.title}">Everyone pays</h3><p th:text="#{steps.3.text}">…</p></li>
+            <li class="t-step"><span class="t-num">4</span><div class="ic" aria-hidden="true">🎉</div><h3 th:text="#{steps.4.title}">Confirmed</h3><p th:text="#{steps.4.text}">…</p></li>
+        </ol>
+    </section>
+
+    <!-- ============ INTERACTIVE: split calculator + live demo ============ -->
+    <section class="wrap section two-col" aria-label="Try it">
+        <div class="card calc" id="calc" aria-labelledby="calcTitle" th:attr="data-person=#{calc.person},data-suite=#{calc.suiteShort}">
+            <span class="eyebrow" th:text="#{calc.eyebrow}">Try it</span>
+            <h2 id="calcTitle" th:text="#{calc.title}">How much does each person pay?</h2>
+            <div class="calc-row">
+                <label for="calcTotal"><span th:text="#{calc.total}">Total for the stay</span> <output id="calcTotalOut" dir="ltr">₪3,000</output></label>
+                <input type="range" id="calcTotal" min="500" max="20000" step="100" value="3000">
+            </div>
+            <div class="calc-row">
+                <span class="calc-label" th:text="#{calc.people}">People</span>
+                <div class="stepper" role="group" th:aria-label="#{calc.people}">
+                    <button type="button" data-step="-1" th:aria-label="#{calc.less}">−</button>
+                    <output id="calcPeople" aria-live="polite">4</output>
+                    <button type="button" data-step="1" th:aria-label="#{calc.more}">+</button>
+                </div>
+            </div>
+            <div class="calc-row">
+                <span class="calc-label" th:text="#{calc.mode}">Split</span>
+                <div class="seg" role="radiogroup" th:aria-label="#{calc.mode}">
+                    <button type="button" role="radio" aria-checked="true" data-mode="equal" th:text="#{split.EQUAL}">Equal split</button>
+                    <button type="button" role="radio" aria-checked="false" data-mode="suite" th:text="#{calc.suiteMode}">One person in a suite</button>
+                </div>
+            </div>
+            <ul class="shares" id="calcShares" aria-live="polite"></ul>
+            <p class="calc-compare">
+                <span th:text="#{calc.without}">Without DiviStay, one friend pays</span> <b id="calcUpfront" dir="ltr">₪3,000</b> <span th:text="#{calc.withoutEnd}">up front and chases everyone.</span>
+            </p>
+        </div>
+
+        <div class="card demo-widget" id="demo" aria-labelledby="demoTitle"
+             th:attr="data-confirmed=#{demo.confirmed},data-waiting=#{member.PENDING},data-paid=#{member.AUTHORIZED}">
+            <span class="eyebrow" th:text="#{demo.eyebrow}">Live demo</span>
+            <h2 id="demoTitle" th:text="#{demo.title}">Watch a group book a weekend</h2>
+            <div class="demo-top">
+                <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+                    <circle class="ring-bg" cx="60" cy="60" r="52"/>
+                    <circle class="ring-fg" id="demoRing" cx="60" cy="60" r="52"/>
+                </svg>
+                <div class="ring-text"><b id="demoPct">0%</b><span th:text="#{dash.paid}">paid</span></div>
+                <div class="demo-hotel">
+                    <strong>Coral Bay Resort</strong>
+                    <span class="muted small" th:text="${@tr.city('Eilat')} + ' · ' + ${@tr.nights(2)}">Eilat · 2 nights</span>
+                    <span class="demo-status" id="demoStatus" th:text="#{status.COLLECTING_PAYMENTS}">Collecting payments</span>
+                </div>
+            </div>
+            <ul class="demo-people" id="demoPeople">
+                <li data-name="Noya"><span class="avatar">N</span><b>Noya</b><span class="amt" dir="ltr">₪780</span><span class="pill ms-pending" th:text="#{member.PENDING}">Waiting</span></li>
+                <li data-name="Amit"><span class="avatar">A</span><b>Amit</b><span class="amt" dir="ltr">₪780</span><span class="pill ms-pending" th:text="#{member.PENDING}">Waiting</span></li>
+                <li data-name="Amir"><span class="avatar">A</span><b>Amir</b><span class="amt" dir="ltr">₪780</span><span class="pill ms-pending" th:text="#{member.PENDING}">Waiting</span></li>
+                <li data-name="Dana"><span class="avatar">D</span><b>Dana</b><span class="amt" dir="ltr">₪780</span><span class="pill ms-pending" th:text="#{member.PENDING}">Waiting</span></li>
+            </ul>
+            <button type="button" class="btn ghost small" id="demoReplay"><span aria-hidden="true">↺</span> <span th:text="#{demo.replay}">Replay</span></button>
+        </div>
+    </section>
+
+    <!-- ============ DESTINATIONS ============ -->
+    <section class="wrap section" id="destinations" aria-labelledby="destTitle">
+        <div class="section-head row">
+            <div><span class="eyebrow" th:text="#{dest.eyebrow}">Where to?</span><h2 id="destTitle" th:text="#{dest.title}">Popular with groups</h2></div>
+            <a class="btn ghost small" th:href="@{/destinations}" th:text="#{dest.all}">All destinations →</a>
+        </div>
+        <div class="dest-grid">
+            <a class="dest-card" th:each="p, i : ${popular}" th:style="'--i:' + ${i.index}"
+               th:href="@{/search(city=${p.destination().name()},checkIn=${defaultCheckIn},checkOut=${defaultCheckOut},adults=2,payers=2)}">
+                <img th:src="${@photos.city(p.destination().key(), i.index == 0)}" alt="" loading="lazy" class="ph">
+                <span class="dest-shade" aria-hidden="true"></span>
+                <span class="dest-text">
+                    <b th:text="${@tr.city(p.destination().name())}">Rome</b>
+                    <small><span th:text="${@tr.country(p.destination().country())}">Italy</span> · <span th:text="#{dest.count(${p.hotels()})}">200 hotels</span></small>
+                    <small class="dest-from"><span th:text="#{hotels.from}">from</span> <span dir="ltr" th:text="${@fmt.money(p.fromNightly())}">₪300</span></small>
+                </span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ============ HOTELS ============ -->
+    <section class="wrap section" id="hotels" aria-labelledby="hotelsTitle">
+        <div class="section-head row">
+            <div><span class="eyebrow" th:text="#{hotels.eyebrow}">Stays</span><h2 id="hotelsTitle" th:text="#{hotels.title}">Hotels</h2></div>
+            <a class="btn ghost small" th:href="@{/search(checkIn=${defaultCheckIn},checkOut=${defaultCheckOut})}" th:text="#{hotels.all(${#numbers.formatInteger(hotelCount, 1, 'COMMA')})}">See all hotels</a>
+        </div>
+        <div class="hgrid">
+            <article class="hcard tilt" th:each="h : ${hotels}">
+                <div class="hcard-photo">
+                    <img class="ph" th:src="${@photos.thumb(h, 0)}" alt="" loading="lazy">
+                    <span class="score" th:title="${@tr.ratingWord(h)}"><b th:text="${h.ratingText()}">9.1</b></span>
+                </div>
+                <div class="hcard-body">
+                    <div class="hotel-city"><span th:text="${@tr.city(h.city())}">City</span> · <span class="stars" th:text="${#strings.repeat('★', h.stars())}" th:aria-label="#{hotel.starsLabel(${h.stars()})}">★★★★</span></div>
+                    <h3 th:text="${@tr.hotelName(h)}">Hotel</h3>
+                    <p class="muted small clamp2" th:text="${@tr.hotelDescription(h)}">Description</p>
+                    <p class="hcard-foot"><span><span class="muted small" th:text="#{hotels.from}">from</span> <b class="price" dir="ltr" th:text="${@fmt.money(h.fromPrice())}">₪0</b> <span class="muted small" th:text="#{hotels.perNight}">/ night</span></span>
+                        <a class="btn small" th:href="@{/hotels/{id}(id=${h.id()},checkIn=${defaultCheckIn},checkOut=${defaultCheckOut})}"
+                           th:aria-label="${@tr.hotelName(h)} + ' – ' + #{hotels.see}" th:text="#{hotels.see}">See rooms →</a></p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- ============ WHY ============ -->
+    <section class="wrap section" aria-labelledby="whyTitle">
+        <div class="section-head">
+            <span class="eyebrow" th:text="#{why.eyebrow}">Why DiviStay</span>
+            <h2 id="whyTitle" th:text="#{why.title}">Built so nobody gets stuck with the bill</h2>
+        </div>
+        <div class="features">
+            <div class="feature"><div class="f-ic" aria-hidden="true">⏳</div><h3 th:text="#{why.1.title}">Rooms are locked</h3><p th:text="#{why.1.text}">…</p></div>
+            <div class="feature"><div class="f-ic" aria-hidden="true">🤝</div><h3 th:text="#{why.2.title}">All or nothing</h3><p th:text="#{why.2.text}">…</p></div>
+            <div class="feature"><div class="f-ic" aria-hidden="true">🔐</div><h3 th:text="#{why.3.title}">Private links</h3><p th:text="#{why.3.text}">…</p></div>
+            <div class="feature"><div class="f-ic" aria-hidden="true">🔁</div><h3 th:text="#{why.4.title}">Never stuck</h3><p th:text="#{why.4.text}">…</p></div>
+        </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="wrap section narrow-section" id="faq" aria-labelledby="faqTitle">
+        <div class="section-head">
+            <span class="eyebrow" th:text="#{faq.eyebrow}">Questions</span>
+            <h2 id="faqTitle" th:text="#{faq.title}">Good to know</h2>
+        </div>
+        <div class="faq">
+            <details th:each="i : ${#numbers.sequence(1, 5)}">
+                <summary th:text="${#messages.msg('faq.' + i + '.q')}">Question</summary>
+                <p th:text="${#messages.msg('faq.' + i + '.a')}">Answer</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="wrap section">
+        <div class="cta">
+            <img class="cta-logo logo-light" th:src="@{/img/emblem.png}" src="/img/emblem.png" alt="">
+            <img class="cta-logo logo-dark" th:src="@{/img/emblem-dark.png}" src="/img/emblem-dark.png" alt="">
+            <div>
+                <h2 th:text="#{cta.title}">Planning a trip with friends?</h2>
+                <p th:text="#{cta.text}">Pick a hotel, split the cost and let DiviStay collect the money.</p>
+            </div>
+            <a href="#main" class="btn primary big-inline" id="ctaTop" th:text="#{cta.button}">Start planning</a>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+<script th:src="@{/home.js}" src="/home.js"></script>
+</body>
+</html>

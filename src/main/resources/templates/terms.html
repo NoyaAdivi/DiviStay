@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{terms.title})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page legal">
+    <a th:href="@{/}" class="back" th:text="#{legal.back}">← Back to DiviStay</a>
+    <article class="card">
+        <h1 th:text="#{terms.title}">Terms of use</h1>
+        <p class="muted small" th:text="#{legal.updated}">Last updated: October 2026</p>
+
+        <th:block th:if="${@tr.isHebrew()}">
+            <h2>מה זה האתר</h2>
+            <p>DiviStay הוא פרויקט לימודי שמדגים הזמנת מלון קבוצתית עם פיצול תשלום. התכנון נעשה על ידי נויה, עמית ואמיר במסגרת קורס הנדסת תוכנה, והפיתוח על ידי נויה אדיבי.</p>
+            <h2>אין הזמנות ואין תשלומים אמיתיים</h2>
+            <ul>
+                <li>המלונות, החדרים והמחירים הם לדוגמה בלבד.</li>
+                <li>התשלומים עוברים דרך ספק תשלומים מדומה. לא מתבצע שום חיוב, ואין להזין כרטיס אשראי אמיתי.</li>
+                <li>ההודעות מוצגות על המסך ולא נשלחות במייל.</li>
+            </ul>
+            <h2>שימוש הוגן</h2>
+            <p>אין לנסות לפרוץ לאתר, להעמיס עליו או להזין בו מידע של אנשים אחרים בלי רשותם.</p>
+            <h2>אחריות</h2>
+            <p>האתר ניתן "כמו שהוא" (AS IS), למטרות לימוד והדגמה, ללא אחריות מכל סוג.</p>
+            <h2>קוד פתוח</h2>
+            <p>קוד המקור זמין <a href="https://github.com/NoyaAdivi/DiviStay" target="_blank" rel="noopener">בגיטהאב</a>. הלוגו ומסמכי התכנון שייכים לצוות הפרויקט.</p>
+            <h2>יצירת קשר</h2>
+            <p>לכל שאלה: <a th:href="${linkedin}" target="_blank" rel="noopener">נויה אדיבי בלינקדאין</a>.</p>
+        </th:block>
+
+        <th:block th:unless="${@tr.isHebrew()}">
+            <h2>What this site is</h2>
+            <p>DiviStay is a learning project that demonstrates group hotel booking with split payments. It was designed by Noya, Amit and Amir as part of a Software Engineering course, and built by Noya Adivi.</p>
+            <h2>No real bookings or payments</h2>
+            <ul>
+                <li>The hotels, rooms and prices are examples only.</li>
+                <li>Payments go through a simulated provider. Nothing is ever charged, and you should not enter a real card.</li>
+                <li>Messages are shown on screen and are not sent by email.</li>
+            </ul>
+            <h2>Fair use</h2>
+            <p>Please don't try to break into the site, overload it, or enter other people's details without their permission.</p>
+            <h2>No warranty</h2>
+            <p>The site is provided "as is", for learning and demonstration, without any warranty.</p>
+            <h2>Open source</h2>
+            <p>The source code is available <a href="https://github.com/NoyaAdivi/DiviStay" target="_blank" rel="noopener">on GitHub</a>. The logo and design documents belong to the project team.</p>
+            <h2>Contact</h2>
+            <p>For any question: <a th:href="${linkedin}" target="_blank" rel="noopener">Noya Adivi on LinkedIn</a>.</p>
+        </th:block>
+    </article>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

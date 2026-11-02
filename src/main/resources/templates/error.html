@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(${@tr.t(title)} ?: #{error.title})}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main id="main" tabindex="-1" class="wrap page narrow">
+    <div class="card center">
+        <img class="logo-light float-soft" th:src="@{/img/emblem.png}" src="/img/emblem.png" alt="" width="120">
+        <img class="logo-dark float-soft" th:src="@{/img/emblem-dark.png}" src="/img/emblem-dark.png" alt="" width="120">
+        <h1 th:text="${@tr.t(title)} ?: (${status} == 404 ? #{error.notFoundTitle} : #{error.title})">Something went wrong</h1>
+        <p th:text="${status} == 404 and ${title} == null ? #{error.notFoundText} : (${@tr.t(message)} ?: #{error.text})">Please go back and try again.</p>
+        <a class="btn primary" th:href="@{/}" th:text="#{error.back}">Back to start</a>
+    </div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

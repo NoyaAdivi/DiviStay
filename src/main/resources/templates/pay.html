@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" th:lang="${@tr.lang()}" th:dir="${@tr.dir()}">
+<head th:replace="~{fragments :: head(#{pay.title})}"></head>
+<body th:attr="data-confetti=${view.member().hasPaid()} ? ${view.member().id()} : null">
+<header th:replace="~{fragments :: header}"></header>
+
+<main id="main" tabindex="-1" class="wrap page narrow" th:with="g=${view.group()},m=${view.member()},h=${view.hotel()}">
+    <div class="card pay-summary">
+        <div class="hotel-city" th:text="${@tr.city(h.city())}">City</div>
+        <h1 th:text="${@tr.hotelName(h)}">Hotel</h1>
+        <p class="muted">
+            <span th:text="${@fmt.date(g.stay().checkIn())}">in</span> – <span th:text="${@fmt.date(g.stay().checkOut())}">out</span> ·
+            <span th:text="#{pay.invitedBy}">invited by</span> <span th:text="${g.organizerName()}">Noya</span>
+        </p>
+        <div class="share"><span th:text="#{pay.yourShare}">Your share</span> <strong th:text="${@fmt.money(m.share())}">₪0</strong></div>
+        <div class="bar" role="progressbar" th:attr="aria-valuenow=${g.paidPercent()}" aria-valuemin="0" aria-valuemax="100"><span th:style="'width:' + ${g.paidPercent()} + '%'"></span></div>
+        <p class="muted small"><span th:text="${g.paidPercent()} + '%'">0%</span> <span th:text="#{pay.groupPaid}">of the group has paid</span></p>
+    </div>
+
+    <div th:if="${m.hasPaid()}" class="card done" role="status">
+        <svg class="check" viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="38"/><path d="M26 43 l11 11 l21 -23"/></svg>
+        <h2 th:text="#{pay.allSet}">You're all set</h2>
+        <p th:text="${m.status().name() == 'CAPTURED'} ? #{pay.doneCaptured} : #{pay.doneHeld}">Your payment is held…</p>
+    </div>
+
+    <div th:if="${!m.hasPaid() and g.status().name() == 'CANCELLED'}" class="card done cancel">
+        <h2 th:text="#{pay.cancelledTitle}">This booking was cancelled</h2>
+        <p th:text="${@tr.t(g.cancellationReason())}">reason</p>
+    </div>
+
+    <form th:if="${!m.hasPaid() and g.status().name() == 'COLLECTING_PAYMENTS'}" class="card" method="post" th:action="@{/pay/{t}(t=${token})}" autocomplete="on">
+        <h2 th:text="#{pay.withCard}">Pay with card</h2>
+        <div class="card3d" id="card3d" aria-hidden="true" dir="ltr">
+            <div class="card-visual face front">
+                <div class="cv-top"><span class="chip"></span><span class="brand-mark" id="cvBrand"></span></div>
+                <span class="num" id="cvNum">•••• •••• •••• ••••</span>
+                <span class="meta"><span id="cvName" th:attr="data-empty=#{pay.previewName}" th:text="#{pay.previewName}">Your name</span><span id="cvExp">MM/YY</span></span>
+            </div>
+            <div class="card-visual face back">
+                <span class="stripe"></span>
+                <span class="sig"><span id="cvCvc">•••</span></span>
+                <span class="back-note">DiviStay · test card</span>
+            </div>
+        </div>
+        <p class="countdown muted" th:attr="data-expires=${@fmt.iso(g.lockExpiresAt())}"><span aria-hidden="true">⏳</span> <b class="cd" dir="ltr">--:--</b> <span th:text="#{pay.leftToPay}">left to pay</span></p>
+        <div th:if="${error}" class="alert error" role="alert" th:text="${@tr.t(error)}">Error</div>
+        <label><span th:text="#{pay.cardName}">Name on card</span> <input name="holderName" th:value="${holderName}" required autocomplete="cc-name"></label>
+        <label><span th:text="#{pay.cardNumber}">Card number</span> <input name="cardNumber" dir="ltr" inputmode="numeric" required autocomplete="cc-number" placeholder="4242 4242 4242 4242"></label>
+        <div class="row3">
+            <label><span th:text="#{pay.month}">Month</span> <input name="expiryMonth" dir="ltr" inputmode="numeric" required placeholder="12" maxlength="2" autocomplete="cc-exp-month"></label>
+            <label><span th:text="#{pay.year}">Year</span> <input name="expiryYear" dir="ltr" inputmode="numeric" required placeholder="2030" maxlength="4" autocomplete="cc-exp-year"></label>
+            <label><span th:text="#{pay.cvc}">CVC</span> <input name="cvc" dir="ltr" inputmode="numeric" required placeholder="123" maxlength="4" autocomplete="cc-csc"></label>
+        </div>
+        <button class="btn primary big" type="submit"><span th:text="#{pay.button}">Pay</span> <span th:text="${@fmt.money(m.share())}">₪0</span></button>
+        <details class="test-cards">
+            <summary th:text="#{pay.testCards}">Test cards (demo, no real money)</summary>
+            <ul>
+                <li><button type="button" class="test-card-btn" data-test-card="4242 4242 4242 4242"><code dir="ltr">4242 4242 4242 4242</code> <span th:text="#{pay.approved}">approved</span></button></li>
+                <li><button type="button" class="test-card-btn" data-test-card="4000 0000 0000 0002"><code dir="ltr">4000 0000 0000 0002</code> <span th:text="#{pay.declined}">declined</span></button></li>
+                <li><button type="button" class="test-card-btn" data-test-card="4000 0000 0000 9995"><code dir="ltr">4000 0000 0000 9995</code> <span th:text="#{pay.noFunds}">insufficient funds</span></button></li>
+            </ul>
+            <span th:text="#{pay.clickToFill}">Click a card to fill the form.</span> <span th:text="#{pay.anyDate}">Any future expiry date and any 3-digit CVC.</span>
+        </details>
+    </form>
+</main>
+
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script>
+(() => {
+  // live preview of the card while typing
+  const f = document.querySelector('form[action*="/pay/"]');
+  if (!f) return;
+  const num = f.elements.cardNumber, name = f.elements.holderName, mm = f.elements.expiryMonth, yy = f.elements.expiryYear;
+  const out = id => document.getElementById(id);
+  const paint = () => {
+    const d = num.value.replace(/\D/g, '').slice(0, 16).padEnd(16, '•');
+    out('cvNum').textContent = d.match(/.{1,4}/g).join(' ');
+    out('cvName').textContent = name.value.trim() || out('cvName').dataset.empty;
+    out('cvExp').textContent = (mm.value || 'MM').padStart(2, '0') + '/' + (yy.value ? yy.value.slice(-2) : 'YY');
+  };
+  num.addEventListener('input', () => {
+    const d = num.value.replace(/\D/g, '').slice(0, 19);
+    num.value = d.replace(/(.{4})/g, '$1 ').trim();
+    paint();
+  });
+  [name, mm, yy].forEach(i => i.addEventListener('input', paint));
+  // flip the card while the CVC is typed, and show the card brand
+  const cvc = f.elements.cvc, card = document.getElementById('card3d');
+  cvc.addEventListener('focus', () => card.classList.add('flipped'));
+  cvc.addEventListener('blur', () => card.classList.remove('flipped'));
+  cvc.addEventListener('input', () => { out('cvCvc').textContent = cvc.value.replace(/\D/g, '') || '•••'; });
+  const brand = () => {
+    const d = num.value.replace(/\D/g, '');
+    out('cvBrand').textContent = /^4/.test(d) ? 'VISA' : /^5[1-5]/.test(d) ? 'MASTERCARD' : /^3[47]/.test(d) ? 'AMEX' : '';
+  };
+  num.addEventListener('input', brand);
+  // test cards fill the form with one click
+  document.querySelectorAll('[data-test-card]').forEach(b => b.addEventListener('click', () => {
+    num.value = b.dataset.testCard; mm.value = '12'; yy.value = String(new Date().getFullYear() + 3); cvc.value = '123';
+    if (!name.value.trim()) name.value = 'Test User';
+    paint(); brand(); out('cvCvc').textContent = '123';
+    f.elements.cardNumber.focus();
+  }));
+  paint();
+})();
+</script>
+</body>
+</html>
