@@ -12,7 +12,7 @@
             <p class="lead" th:text="#{destinations.lead(${#numbers.formatInteger(hotelCount, 1, 'COMMA')}, ${groups.size()})}">12,000 real hotels in 21 countries.</p>
             <nav class="country-chips" th:aria-label="#{destinations.jump}">
                 <a th:each="g : ${groups}" th:href="'#c-' + ${g.country()}" class="cchip">
-                    <span th:text="${@tr.country(g.country())}">Greece</span> <small th:text="${g.hotels()}">1200</small></a>
+                    <span th:text="${@tr.country(g.country())}">Greece</span> <small th:text="${#numbers.formatInteger(g.hotels(), 1, 'COMMA')}">1,200</small></a>
             </nav>
         </div>
     </section>
@@ -21,7 +21,7 @@
         <section class="country" th:each="g, gi : ${groups}" th:id="'c-' + ${g.country()}" th:style="'--i:' + ${gi.index}">
             <div class="country-head">
                 <h2 th:text="${@tr.country(g.country())}">Greece</h2>
-                <a class="btn primary small"
+                <a class="btn ghost small"
                    th:href="@{/search(city=${@tr.country(g.country())},checkIn=${defaultCheckIn},checkOut=${defaultCheckOut})}"
                    th:text="#{destinations.allIn(${@tr.country(g.country())}, ${#numbers.formatInteger(g.hotels(), 1, 'COMMA')})}">All 1,200 hotels in Greece →</a>
             </div>
@@ -41,6 +41,7 @@
             </div>
         </section>
         <p class="demo-note small"><span aria-hidden="true">ℹ️</span> <span th:utext="#{search.realNote}">Real hotels from OpenStreetMap.</span></p>
+        <p class="demo-note small" th:utext="#{destinations.credit}">City photos from Unsplash and Wikimedia Commons.</p>
     </div>
 </main>
 

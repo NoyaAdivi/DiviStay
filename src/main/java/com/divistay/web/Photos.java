@@ -5,9 +5,14 @@ import com.divistay.domain.PhotoSet;
 import com.divistay.domain.RoomType;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Photos for hotels and room types, used as {@code ${@photos.hotel(h, 0)}}.
@@ -56,6 +61,23 @@ public class Photos {
             Map.entry("crete", List.of("1664118145742-f2ad1c09c10b", "1557353212-adb233ad2181")),
             Map.entry("rhodes", List.of("1616763866684-b215941fae5e", "1602008194020-13ac6665ebdb")));
 
+    /** Free photos of the other destinations, from Wikimedia Commons (credits in docs/PHOTO_CREDITS.md). */
+    private static final Map<String, String> COMMONS = loadCommons();
+
+    private static Map<String, String> loadCommons() {
+        Properties file = new Properties();
+        try (InputStream in = Photos.class.getResourceAsStream("/catalog/city-photos.properties")) {
+            if (in != null) {
+                file.load(in);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        Map<String, String> urls = new HashMap<>();
+        file.stringPropertyNames().forEach(key -> urls.put(key, file.getProperty(key)));
+        return urls;
+    }
+
     /** Inside the hotel: lobby, lounge, pool bar. */
     private static final List<String> INSIDE = List.of(
             "1660557989695-14fac79c086d", "1758448656987-cfae6bf225e4", "1590447158019-883d8d5f8bc7",
@@ -99,11 +121,15 @@ public class Photos {
     }
 
     public boolean hasCity(String key) {
-        return CITY.containsKey(key);
+        return CITY.containsKey(key) || COMMONS.containsKey(key);
     }
 
     /** A photo of the city itself; for a city without one, a photo that fits the kind of place. */
     public String city(String key, boolean big) {
+        String commons = COMMONS.get(key);
+        if (commons != null) {
+            return big ? commons.replace("/500px-", "/960px-") : commons;
+        }
         List<String> list = CITY.get(key);
         if (list == null) {
             list = OUTSIDE.get(PhotoSet.SEA);

@@ -19,7 +19,7 @@ public final class Money {
     /** "₪1,234.50" */
     public static String format(long agorot) {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-        nf.setMinimumFractionDigits(2);
+        nf.setMinimumFractionDigits(agorot % 100 == 0 ? 0 : 2);
         nf.setMaximumFractionDigits(2);
         return "₪" + nf.format(agorot / 100.0);
     }

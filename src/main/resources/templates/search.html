@@ -13,8 +13,16 @@
 
     <div class="wrap results-layout">
         <!-- ============ FILTERS ============ -->
-        <aside class="filters card" aria-labelledby="filtersTitle">
-            <form method="get" th:action="@{/search}" data-autosubmit id="filterForm">
+        <aside class="filter-drop-wrap" th:aria-label="#{filter.title}"
+               th:with="active=${query.stars().size() + query.amenities().size() + (query.minRating() > 0 ? 1 : 0) + (maxPrice > 0 ? 1 : 0)}">
+            <details class="filter-drop">
+            <summary class="filter-toggle">
+                <span aria-hidden="true">🎛️</span> <span th:text="#{filter.title}">Filter</span>
+                <span class="filter-count" th:if="${active > 0}" th:text="${active}">2</span>
+                <span class="filter-caret" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="filters card">
+            <form method="get" th:action="@{/search}" id="filterForm" class="filter-form">
                 <input type="hidden" name="city" th:value="${city}">
                 <input type="hidden" name="checkIn" th:value="${stay.checkIn()}">
                 <input type="hidden" name="checkOut" th:value="${stay.checkOut()}">
@@ -22,7 +30,6 @@
                 <input type="hidden" name="payers" th:value="${guests.payers()}">
                 <input type="hidden" name="ages" th:each="a : ${guests.childAges()}" th:value="${a}">
                 <input type="hidden" name="sort" th:value="${query.sort()}">
-                <h2 id="filtersTitle" class="h3"><span aria-hidden="true">🎛️</span> <span th:text="#{filter.title}">Filter</span></h2>
 
                 <fieldset class="f-group">
                     <legend th:text="#{filter.stars}">Stars</legend>
@@ -48,7 +55,7 @@
                     <legend th:text="#{filter.maxPrice}">Max price per room / night</legend>
                     <select name="maxPrice" th:aria-label="#{filter.maxPrice}">
                         <option value="0" th:selected="${maxPrice == 0}" th:text="#{filter.noLimit}">No limit</option>
-                        <option th:each="m : ${ {300, 500, 800, 1200, 2000} }" th:value="${m}" th:selected="${maxPrice == m}" th:text="'₪' + ${m}">₪500</option>
+                        <option th:each="m : ${ {300, 500, 800, 1200, 2000} }" th:value="${m}" th:selected="${maxPrice == m}" th:text="'₪' + ${#numbers.formatInteger(m, 1, 'COMMA')}">₪500</option>
                     </select>
                 </fieldset>
 
@@ -59,9 +66,13 @@
                         <span><span aria-hidden="true" th:text="${a.emoji()}">📶</span> <span th:text="${@tr.amenity(a)}">Wi-Fi</span></span>
                     </label>
                 </fieldset>
-                <noscript><button class="btn small" type="submit" th:text="#{filter.apply}">Apply</button></noscript>
+                <div class="filter-actions">
+                    <button class="btn primary small" type="submit" th:text="#{filter.apply}">Apply</button>
                 <a class="btn ghost small" th:href="@{/search(city=${city},checkIn=${stay.checkIn()},checkOut=${stay.checkOut()},adults=${guests.adults()},ages=${agesQ},payers=${guests.payers()})}" th:text="#{filter.clear}">Clear filters</a>
+                </div>
             </form>
+            </div>
+            </details>
         </aside>
 
         <!-- ============ RESULTS ============ -->

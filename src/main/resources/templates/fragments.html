@@ -22,6 +22,22 @@
         })();
     </script>
     <link rel="icon" type="image/png" th:href="@{/img/favicon.png}">
+    <!-- add to home screen: the icon is named DiviStay on every phone -->
+    <link rel="manifest" th:href="@{/manifest.json}">
+    <link rel="apple-touch-icon" th:href="@{/img/icons/apple-touch-icon.png}">
+    <meta name="application-name" content="DiviStay">
+    <meta name="apple-mobile-web-app-title" content="DiviStay">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <!-- link preview on LinkedIn, WhatsApp and search engines -->
+    <meta name="description" th:content="#{meta.description}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="DiviStay">
+    <meta property="og:title" th:content="${title} + ' · DiviStay'">
+    <meta property="og:description" th:content="#{meta.description}">
+    <meta property="og:image" content="https://divistay.onrender.com/img/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap">
