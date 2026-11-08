@@ -9,7 +9,7 @@ The organizer picks the rooms, everyone pays their own share from a personal lin
 
 <p align="center"><a href="https://divistay.onrender.com"><b>Live demo</b></a> · <a href="docs/">Architecture &amp; requirements (PDF)</a></p>
 
-<p align="center"><img src="docs/screenshot.jpg" alt="DiviStay home page" width="800"></p>
+<p align="center"><img src="docs/screenshot.png" alt="DiviStay home page" width="800"></p>
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
 
