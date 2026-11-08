@@ -11,7 +11,7 @@
 
 <p align="center"><a href="https://divistay.onrender.com"><b>לאתר החי</b></a> · <a href="docs/">מסמכי ארכיטקטורה ודרישות (PDF)</a></p>
 
-<p align="center"><img src="docs/screenshot.jpg" alt="DiviStay home page" width="800"></p>
+<p align="center"><img src="docs/screenshot-he.jpg" alt="DiviStay home page" width="800"></p>
 
 <p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים וחוות הדעת מדומים. הטעינה הראשונה יכולה לקחת כחצי דקה.</sub></p>
 
