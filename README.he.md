@@ -1,24 +1,34 @@
 <div dir="rtl">
 
-<p align="center"><img src="docs/logo.png" alt="DiviStay logo" width="200"></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/logo.png" width="190" alt="DiviStay"></a>
+</p>
 
 <h1 align="center">DiviStay</h1>
 
 <p align="center"><a href="README.md">English</a> · <b>עברית</b></p>
 
-<p align="center"><b>הזמנת מלון קבוצתית עם פיצול תשלום.</b><br>
-המארגן בוחר חדרים, כל אחד משלם את החלק שלו מקישור אישי, וההזמנה מאושרת רק כשכל הקבוצה שילמה.</p>
+<p align="center">
+  <b>מזמינים יחד. כל אחד משלם את החלק שלו.</b><br>
+  המארגן בוחר חדרים, כל אחד משלם מקישור אישי,<br>
+  וההזמנה מאושרת רק כשכל הקבוצה שילמה.
+</p>
 
-<p align="center"><a href="https://divistay.onrender.com"><b>לאתר החי</b></a> · <a href="docs/">מסמכי ארכיטקטורה ודרישות (PDF)</a></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/לאתר_החי-FFD5C9?style=for-the-badge&logo=render&logoColor=A8483A" alt="לאתר החי"></a> <img src="https://img.shields.io/badge/Java_21-CFE6FA?style=for-the-badge&logo=openjdk&logoColor=3F6D9F" alt="Java 21"> <img src="https://img.shields.io/badge/Spring_Boot_3-BFEBD9?style=for-the-badge&logo=springboot&logoColor=1F7350" alt="Spring Boot 3"> <img src="https://img.shields.io/badge/JUnit_5-DAD5FF?style=for-the-badge&logo=junit5&logoColor=5548C8" alt="JUnit 5"> <img src="https://img.shields.io/badge/Docker-FBD5E0?style=for-the-badge&logo=docker&logoColor=A03A5C" alt="Docker">
+</p>
 
-<p align="center"><img src="docs/screenshot-he.png" alt="DiviStay home page" width="800"></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/screenshot-he.png" width="820" alt="דף הבית של DiviStay"></a>
+</p>
 
-<p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים וחוות הדעת מדומים. הטעינה הראשונה יכולה לקחת כחצי דקה.</sub></p>
+<p align="center">
+  🏨 <b>18,000+</b> מלונות אמיתיים &nbsp;·&nbsp; ⏱️ החזקת חדרים אטומית ל-<b>30</b> דקות &nbsp;·&nbsp; 🧪 <b>45</b> בדיקות JUnit &nbsp;·&nbsp; 🌍 עברית ואנגלית
+</p>
 
+<p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים והביקורות מדומים. הטעינה הראשונה יכולה לקחת כ-30 שניות.</sub></p>
 
----
-
-הפרויקט התחיל כ**פרויקט ארכיטקטורה ודרישות** (מסמך דרישות, UML ותבניות עיצוב, בתיקייה [`docs/`](docs/)), ואחר כך **מומש ב-Java 21 וב-Spring Boot** לפי אותו תכנון.
+> 📐 התחיל כפרויקט **ארכיטקטורה ודרישות** (SRS, UML ותבניות עיצוב, ראו [`docs/`](docs/)) שתוכנן בצוות של 3, ואחר כך **מומש ב-Java 21 וב-Spring Boot** ועלה לאוויר כאתר חי.
 
 ## איך זה עובד
 
@@ -63,7 +73,7 @@
 2. פותחים את `src/main/java/com/divistay/DiviStayApplication.java` ולוחצים ▶ **Run**.
 3. נכנסים ל-**http://localhost:8080**.
 
-**לנסות:** יוצרים קבוצה עם 2–3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC).
+**לנסות:** יוצרים קבוצה עם 2-3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC).
 
 ## העלאה לאינטרנט
 

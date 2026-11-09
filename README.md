@@ -1,30 +1,40 @@
-<p align="center"><img src="docs/logo.png" alt="DiviStay logo" width="200"></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/logo.png" width="190" alt="DiviStay"></a>
+</p>
 
 <h1 align="center">DiviStay</h1>
 
 <p align="center"><b>English</b> · <a href="README.he.md">עברית</a></p>
 
-<p align="center"><b>Group hotel booking with payment splitting.</b><br>
-The organizer picks the rooms, everyone pays their own share from a personal link, and the booking is confirmed only when the whole group has paid.</p>
+<p align="center">
+  <b>Book together. Everyone pays their own share.</b><br>
+  The organizer picks the rooms, each member pays from a personal link,<br>
+  and the booking is confirmed only when the whole group has paid.
+</p>
 
-<p align="center"><a href="https://divistay.onrender.com"><b>Live demo</b></a> · <a href="docs/">Architecture &amp; requirements (PDF)</a></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/Live_demo-FFD5C9?style=for-the-badge&logo=render&logoColor=A8483A" alt="Live demo"></a> <img src="https://img.shields.io/badge/Java_21-CFE6FA?style=for-the-badge&logo=openjdk&logoColor=3F6D9F" alt="Java 21"> <img src="https://img.shields.io/badge/Spring_Boot_3-BFEBD9?style=for-the-badge&logo=springboot&logoColor=1F7350" alt="Spring Boot 3"> <img src="https://img.shields.io/badge/JUnit_5-DAD5FF?style=for-the-badge&logo=junit5&logoColor=5548C8" alt="JUnit 5"> <img src="https://img.shields.io/badge/Docker-FBD5E0?style=for-the-badge&logo=docker&logoColor=A03A5C" alt="Docker">
+</p>
 
-<p align="center"><img src="docs/screenshot.png" alt="DiviStay home page" width="800"></p>
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/screenshot.png" width="820" alt="DiviStay home page"></a>
+</p>
+
+<p align="center">
+  🏨 <b>18,000+</b> real hotels &nbsp;·&nbsp; ⏱️ <b>30-min</b> atomic room hold &nbsp;·&nbsp; 🧪 <b>45</b> JUnit tests &nbsp;·&nbsp; 🌍 Hebrew + English
+</p>
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
 
-
----
-
-This project started as a **software architecture and requirements** project (SRS, UML, design patterns – see [`docs/`](docs/)) and was then **implemented in Java 21 + Spring Boot**, following the same design.
+> 📐 Started as a **software architecture and requirements** project (SRS, UML and design patterns, see [`docs/`](docs/)), designed in a team of 3, and then **implemented in Java 21 and Spring Boot** and deployed as a live site.
 
 ## How it works
 
-1. **Search & lock** – the organizer chooses rooms; they are held for **30 minutes** so nobody else can book them (overbooking protection).
-2. **Split** – the cost is divided **equally**, **by room** (people in a suite pay more) or with **custom amounts**.
-3. **Pay** – each member gets an unguessable personal payment link. Paying *authorizes* (holds) the amount on their card.
-4. **Confirm** – when 100% is paid, the reservation is sent to the hotel. On success the holds are *captured* and receipts are sent; if the hotel's system is down, the request is **retried with exponential backoff**.
-5. **Cancel automatically** – if time runs out (or the hotel never confirms), the rooms are released and every hold is **voided**: nobody is charged.
+1. **Search & lock** - the organizer chooses rooms; they are held for **30 minutes** so nobody else can book them (overbooking protection).
+2. **Split** - the cost is divided **equally**, **by room** (people in a suite pay more) or with **custom amounts**.
+3. **Pay** - each member gets an unguessable personal payment link. Paying *authorizes* (holds) the amount on their card.
+4. **Confirm** - when 100% is paid, the reservation is sent to the hotel. On success the holds are *captured* and receipts are sent; if the hotel's system is down, the request is **retried with exponential backoff**.
+5. **Cancel automatically** - if time runs out (or the hotel never confirms), the rooms are released and every hold is **voided**: nobody is charged.
 
 ## Design patterns
 
@@ -67,7 +77,7 @@ classDiagram
 - **Search by city or country,** in Hebrew or English, and a destinations page by country.
 - **Search like a real booking site:** adults, children with their ages, and how many people split the bill. For every hotel the cheapest set of rooms that sleeps the whole group is found (a small knapsack), with the price per payer. Filters for stars, rating, price and facilities, sorting and pages.
 - **Concurrency:** holding rooms is atomic and all-or-nothing; a test races 32 threads for one room and checks that exactly one wins. Payments and the background job lock the same group, so they can never act on it at the same moment.
-- **Money:** stored as whole agorot (`long`), never floating point. Splits always add up exactly – leftover agorot are assigned deterministically.
+- **Money:** stored as whole agorot (`long`), never floating point. Splits always add up exactly - leftover agorot are assigned deterministically.
 - **Security:** payment and dashboard links are 256-bit random tokens; only their SHA-256 hashes are stored. Card details are never stored and are masked in logs.
 - **Idempotency:** the same member paying with the same card twice (double click, retry) can never be charged twice.
 - **State machine:** `BookingGroup` only allows valid transitions (collecting → funded → confirmed / retrying / cancelled).
@@ -75,7 +85,7 @@ classDiagram
 - **Accessibility:** an accessibility menu (text size, high contrast, highlighted links, readable font, stop animations, big cursor), keyboard navigation with a skip link, labelled form groups, WCAG AA colour contrast and an accessibility statement. Respects the system "reduce motion" setting.
 - **Dark mode:** follows the system setting and can be switched by hand; the choice is applied before the page paints.
 - **Legal pages:** privacy policy, terms of use and accessibility statement, in both languages.
-- **Tests:** JUnit 5 – split rules, inventory locking and concurrency, the full life cycle (expiry, retries, give-up and refund), the payment adapter, and an end-to-end web test with MockMvc.
+- **Tests:** JUnit 5 - split rules, inventory locking and concurrency, the full life cycle (expiry, retries, give-up and refund), the payment adapter, and an end-to-end web test with MockMvc.
 
 ## Run it
 
@@ -89,7 +99,7 @@ Requirements: **Java 21 or newer**. Or with **IntelliJ IDEA**:
 
 Or from a terminal with Maven installed: `mvn spring-boot:run`, and `mvn test` for the tests.
 
-**Try it:** create a group with 2–3 emails → open the payment links from the *Messages sent* box on the dashboard → pay with test card `4242 4242 4242 4242` (any future date, any CVC). `4000 0000 0000 0002` is declined. To watch the automatic cancellation quickly, set `divistay.payment-window-minutes=2` in `src/main/resources/application.properties`.
+**Try it:** create a group with 2-3 emails → open the payment links from the *Messages sent* box on the dashboard → pay with test card `4242 4242 4242 4242` (any future date, any CVC). `4000 0000 0000 0002` is declined. To watch the automatic cancellation quickly, set `divistay.payment-window-minutes=2` in `src/main/resources/application.properties`.
 
 ## Project structure
 
