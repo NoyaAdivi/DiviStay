@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/לאתר_החי-FFD5C9?style=for-the-badge&logo=render&logoColor=A8483A" alt="לאתר החי"></a> <img src="https://img.shields.io/badge/Java_21-CFE6FA?style=for-the-badge&logo=openjdk&logoColor=3F6D9F" alt="Java 21"> <img src="https://img.shields.io/badge/Spring_Boot_3-BFEBD9?style=for-the-badge&logo=springboot&logoColor=1F7350" alt="Spring Boot 3"> <img src="https://img.shields.io/badge/JUnit_5-DAD5FF?style=for-the-badge&logo=junit5&logoColor=5548C8" alt="JUnit 5"> <img src="https://img.shields.io/badge/Docker-FBD5E0?style=for-the-badge&logo=docker&logoColor=A03A5C" alt="Docker">
+  <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/Live_demo-FFD5C9?style=for-the-badge&logo=render&logoColor=A8483A" alt="Live demo"></a>
 </p>
 
 <p align="center">
