@@ -120,6 +120,16 @@
 
 <p align="center"><sub><i>תוכנן על ידי נויה, עמית ואמיר במסגרת קורס הנדסת תוכנה; מומש על ידי נויה.</i></sub></p>
 
+<details>
+<summary><b>📸 צילומי מסך מלאים של האתר החי</b></summary>
+
+<p align="center">
+  <a href="docs/site-full-he.png"><img src="docs/site-he.png" width="49%" alt="DiviStay בעברית"></a>
+  <a href="docs/site-full-en.png"><img src="docs/site-en.png" width="49%" alt="DiviStay באנגלית"></a>
+</p>
+<p align="center"><sub>לוחצים על תמונה כדי לפתוח את העמוד המלא. צולם עם <a href="scripts/screenshots.py"><code>scripts/screenshots.py</code></a>.</sub></p>
+</details>
+
 <a name="contact"></a>
 <p align="center"><a href="https://www.linkedin.com/in/noya-adivi/"><img src="docs/readme/footer-he.svg" width="100%" alt="נוצר על ידי נויה אדיבי"></a></p>
 

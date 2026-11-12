@@ -165,6 +165,16 @@ Payments and the hotel system are **simulated** (no real money), messages appear
 
 <p align="center"><sub><i>Designed by Noya, Amit and Amir as part of a Software Engineering course; implemented by Noya.</i></sub></p>
 
+<details>
+<summary><b>📸 Full-page screenshots of the live site</b></summary>
+
+<p align="center">
+  <a href="docs/site-full-en.png"><img src="docs/site-en.png" width="49%" alt="DiviStay in English"></a>
+  <a href="docs/site-full-he.png"><img src="docs/site-he.png" width="49%" alt="DiviStay in Hebrew"></a>
+</p>
+<p align="center"><sub>Click an image to open the full page. Captured with <a href="scripts/screenshots.py"><code>scripts/screenshots.py</code></a>.</sub></p>
+</details>
+
 <a name="contact"></a>
 <p align="center"><a href="https://www.linkedin.com/in/noya-adivi/"><img src="docs/readme/footer-en.svg" width="100%" alt="Built by Noya Adivi"></a></p>
 
