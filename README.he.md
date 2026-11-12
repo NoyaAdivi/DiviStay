@@ -13,7 +13,6 @@
 </p>
 
 <p align="center">
-  <!--<img src="https://img.shields.io/github/license/NoyaAdivi/DiviStay?color=DAD5FF&labelColor=5548C8" alt="License">-->
   <a href="https://github.com/NoyaAdivi/DiviStay/commits/main"><img src="https://img.shields.io/github/last-commit/NoyaAdivi/DiviStay?color=FFD5C9&labelColor=A8483A" alt="Last commit"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/languages/top/NoyaAdivi/DiviStay?color=D9F3E7&labelColor=1F7350" alt="Top language"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/repo-size/NoyaAdivi/DiviStay?color=FBD5E0&labelColor=A03A5C" alt="Repo size"></a>
@@ -30,12 +29,12 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/screenshot-he.png" width="100%" alt="דף הבית של DiviStay"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/readme/showcase-he.png" width="100%" alt="דף הבית של DiviStay"></a>
 </p>
 
 <p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים והביקורות מדומים. הטעינה הראשונה יכולה לקחת כ־30 שניות.</sub></p>
 
-> 📐 התחיל כפרויקט **ארכיטקטורה ודרישות תוכנה** ([DiviStay Architecture](https://github.com/NoyaAdivi/DiviStay_Architecture), SRS ו־UML בתיקייה [`docs/`](docs/)), תוכנן בצוות של 3, ואז **מומש ב־Java 21 וב־Spring Boot** ועלה לאוויר.
+> 📐 התחיל כפרויקט **ארכיטקטורה ודרישות תוכנה** (מסמך הדרישות ותרשימי ה־UML נמצאים בתיקייה [`docs/`](docs/)), תוכנן בצוות של 3, ואז **מומש ב־Java 21 וב־Spring Boot** ועלה לאוויר.
 
 <table align="center">
   <tr>
@@ -47,7 +46,7 @@
 </table>
 
 <a name="s1"></a>
-<p align="center"><a href="#s1"><img src="docs/readme/s1-he.svg" width="100%" alt="איך זה עובד"></a></p>
+<p align="center"><a href="https://divistay.onrender.com"><img src="docs/readme/s1-he.svg" width="100%" alt="איך זה עובד"></a></p>
 
 
 1. **חיפוש ונעילה:** המארגן בוחר חדרים, והם ננעלים ל-**30 דקות** כדי שאף אחד אחר לא יזמין אותם (מניעת הזמנת יתר).
@@ -57,7 +56,7 @@
 5. **ביטול אוטומטי:** אם הזמן נגמר, או שהמלון לא אישר, החדרים משתחררים וכל הקפאה **מבוטלת**, כך שאף אחד לא מחויב.
 
 <a name="s2"></a>
-<p align="center"><a href="#s2"><img src="docs/readme/s2-he.svg" width="100%" alt="תבניות עיצוב"></a></p>
+<p align="center"><a href="src/main/java"><img src="docs/readme/s2-he.svg" width="100%" alt="תבניות עיצוב"></a></p>
 
 
 | תבנית | איפה | למה |
@@ -68,7 +67,7 @@
 | **Ports & adapters** | `HotelPmsClient`, `NotificationService`, ה-repositories | בליבה **אין תלות ב-Spring**. Spring רק מחבר את החלקים (`AppConfig`). |
 
 <a name="s3"></a>
-<p align="center"><a href="#s3"><img src="docs/readme/s3-he.svg" width="100%" alt="פרטים הנדסיים"></a></p>
+<p align="center"><a href="pom.xml"><img src="docs/readme/s3-he.svg" width="100%" alt="פרטים הנדסיים"></a></p>
 
 
 - **מלונות אמיתיים:** יותר מ-18,000 מלונות אמיתיים ב-60 יעדים ו-21 מדינות, מתוך OpenStreetMap (רישיון ODbL): שם, כתובת, מיקום וכוכבים כשידועים. החדרים, המחירים וחוות הדעת מדומים (אין גישה לזמינות אמיתית), והתמונות מתאימות לסוג המקום: עיר, חוף, אי יווני או ריזורט.
@@ -86,7 +85,7 @@
 - **בדיקות:** JUnit 5 לכללי הפיצול, לנעילה ולמקביליות, לכל מחזור החיים, ל-Adapter של התשלום, ובדיקת קצה-לקצה של האתר עם MockMvc.
 
 <a name="s4"></a>
-<p align="center"><a href="#s4"><img src="docs/readme/s4-he.svg" width="100%" alt="הרצה"></a></p>
+<p align="center"><a href="START-DIVISTAY.bat"><img src="docs/readme/s4-he.svg" width="100%" alt="הרצה"></a></p>
 
 
 **בווינדוס, בלי שום הגדרה:** לחיצה כפולה על `START-DIVISTAY.bat`. הקובץ מוצא Java 21 ומעלה במחשב, מוריד את Maven בפעם הראשונה, מפעיל את האתר ופותח את הדפדפן. `TEST-DIVISTAY.bat` מריץ את כל הבדיקות.
@@ -100,7 +99,7 @@
 **לנסות:** יוצרים קבוצה עם 2-3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC).
 
 <a name="s5"></a>
-<p align="center"><a href="#s5"><img src="docs/readme/s5-he.svg" width="100%" alt="העלאה לאינטרנט"></a></p>
+<p align="center"><a href="render.yaml"><img src="docs/readme/s5-he.svg" width="100%" alt="העלאה לאינטרנט"></a></p>
 
 
 האתר הוא שרת Java, ולכן הוא לא עולה ל-Vercel. הדרך הפשוטה היא [Render](https://render.com), שיש לו מסלול חינמי:
@@ -112,7 +111,7 @@
 כדאי לדעת: במסלול החינמי השרת נרדם אחרי 15 דקות בלי ביקורים, והטעינה הראשונה אחרי זה לוקחת כחצי דקה. כל ההזמנות נשמרות בזיכרון, אז הן מתאפסות כשהשרת מתחיל מחדש. זה בסדר לאתר הדגמה.
 
 <a name="s6"></a>
-<p align="center"><a href="#s6"><img src="docs/readme/s6-he.svg" width="100%" alt="היקף וצעדים הבאים"></a></p>
+<p align="center"><a href="docs/"><img src="docs/readme/s6-he.svg" width="100%" alt="היקף וצעדים הבאים"></a></p>
 
 
 התשלומים ומערכת המלון **מדומים** (אין כסף אמיתי), ההודעות מוצגות על המסך במקום במייל, והמידע נשמר בזיכרון. כל אחד מהם נמצא מאחורי ממשק, ולכן הצעדים הבאים הם Adapters חדשים, לא כתיבה מחדש: ספק תשלום אמיתי, API של מלון, שירות מייל ומסד נתונים.
@@ -121,7 +120,7 @@
 <p align="center"><sub><i>תוכנן על ידי נויה, עמית ואמיר במסגרת קורס הנדסת תוכנה; מומש על ידי נויה.</i></sub></p>
 
 <a name="contact"></a>
-<p align="center"><a href="#contact"><img src="docs/readme/footer-he.svg" width="100%" alt="נבנה על ידי נויה אדיבי"></a></p>
+<p align="center"><a href="https://www.linkedin.com/in/noya-adivi/"><img src="docs/readme/footer-he.svg" width="100%" alt="נוצר על ידי נויה אדיבי"></a></p>
 
 <p align="center">
   <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/%D7%9C%D6%BEDiviStay-FFD5C9?style=for-the-badge&logo=github&logoColor=A8483A" alt="ל־DiviStay"></a>
