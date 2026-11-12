@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <!--<img src="https://img.shields.io/github/license/NoyaAdivi/DiviStay?color=DAD5FF&labelColor=5548C8" alt="License">-->
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/NoyaAdivi/DiviStay?color=DAD5FF&labelColor=5548C8" alt="License"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay/commits/main"><img src="https://img.shields.io/github/last-commit/NoyaAdivi/DiviStay?color=FFD5C9&labelColor=A8483A" alt="Last commit"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/languages/top/NoyaAdivi/DiviStay?color=D9F3E7&labelColor=1F7350" alt="Top language"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/repo-size/NoyaAdivi/DiviStay?color=FBD5E0&labelColor=A03A5C" alt="Repo size"></a>
