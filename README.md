@@ -1,33 +1,52 @@
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/logo.png" width="190" alt="DiviStay"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/readme/banner-en.svg" width="100%" alt="DiviStay: group hotel booking with payment splitting"></a>
 </p>
 
-<h1 align="center">DiviStay</h1>
-
-<p align="center"><b>English</b> · <a href="README.he.md">עברית</a></p>
-
-<p align="center">
-  <b>Book together. Everyone pays their own share.</b><br>
-  The organizer picks the rooms, each member pays from a personal link,<br>
-  and the booking is confirmed only when the whole group has paid.
-</p>
+<p align="center"><a href="README.he.md"><img src="docs/readme/lang-he.svg" height="44" alt="לגרסה בעברית"></a></p>
 
 <p align="center">
   <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/Live_demo-FFD5C9?style=for-the-badge&logo=render&logoColor=A8483A" alt="Live demo"></a>
-
-<p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/screenshot.png" width="820" alt="DiviStay home page"></a>
+  <a href="#how-it-works"><img src="https://img.shields.io/badge/How_it_works-DAD5FF?style=for-the-badge&logo=spring&logoColor=5548C8" alt="How it works"></a>
+  <a href="docs/"><img src="https://img.shields.io/badge/Design_docs-D9F3E7?style=for-the-badge&logo=readthedocs&logoColor=1F7350" alt="Design docs"></a>
 </p>
 
 <p align="center">
-  🏨 <b>18,000+</b> real hotels &nbsp;·&nbsp; ⏱️ <b>30-min</b> atomic room hold &nbsp;·&nbsp; 🧪 <b>45</b> JUnit tests &nbsp;·&nbsp; 🌍 Hebrew + English
+  <!--<img src="https://img.shields.io/github/license/NoyaAdivi/DiviStay?color=DAD5FF&labelColor=5548C8" alt="License">-->
+  <a href="https://github.com/NoyaAdivi/DiviStay/commits/main"><img src="https://img.shields.io/github/last-commit/NoyaAdivi/DiviStay?color=FFD5C9&labelColor=A8483A" alt="Last commit"></a>
+  <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/languages/top/NoyaAdivi/DiviStay?color=D9F3E7&labelColor=1F7350" alt="Top language"></a>
+  <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/repo-size/NoyaAdivi/DiviStay?color=FBD5E0&labelColor=A03A5C" alt="Repo size"></a>
+</p>
+
+<h3 align="center">The organizer picks the rooms, each member pays from a personal link.</h3>
+
+<p align="center">
+  The booking is confirmed only when the whole group has paid, and nobody is charged if it falls through.
+</p>
+
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/logo.png" width="150" alt="DiviStay logo"></a>
+</p>
+
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/screenshot.png" width="100%" alt="DiviStay home page"></a>
 </p>
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
 
-> 📐 Started as a **software architecture and requirements** project (SRS, UML and design patterns, see [`docs/`](docs/)), designed in a team of 3, and then **implemented in Java 21 and Spring Boot** and deployed as a live site.
+> 📐 Started as a **software architecture and requirements** project ([DiviStay Architecture](https://github.com/NoyaAdivi/DiviStay_Architecture), SRS and UML in [`docs/`](docs/)), designed in a team of 3, then **implemented in Java 21 and Spring Boot** and deployed as a live site.
 
-## How it works
+<table align="center">
+  <tr>
+    <td align="center" width="25%"><a href="#engineering-details"><b>🏨 18,000+</b></a><br><sub>real hotels</sub></td>
+    <td align="center" width="25%"><a href="#how-it-works"><b>⏱️ 30 min</b></a><br><sub>atomic room hold</sub></td>
+    <td align="center" width="25%"><a href="#engineering-details"><b>🧪 45</b></a><br><sub>JUnit tests</sub></td>
+    <td align="center" width="25%"><a href="https://divistay.onrender.com"><b>🌍 HE · EN</b></a><br><sub>fully bilingual</sub></td>
+  </tr>
+</table>
+
+<a name="how-it-works"></a>
+<p align="center"><a href="#how-it-works"><img src="docs/readme/how-it-works-en.svg" width="100%" alt="How it works"></a></p>
+
 
 1. **Search & lock** - the organizer chooses rooms; they are held for **30 minutes** so nobody else can book them (overbooking protection).
 2. **Split** - the cost is divided **equally**, **by room** (people in a suite pay more) or with **custom amounts**.
@@ -35,7 +54,9 @@
 4. **Confirm** - when 100% is paid, the reservation is sent to the hotel. On success the holds are *captured* and receipts are sent; if the hotel's system is down, the request is **retried with exponential backoff**.
 5. **Cancel automatically** - if time runs out (or the hotel never confirms), the rooms are released and every hold is **voided**: nobody is charged.
 
-## Design patterns
+<a name="design-patterns"></a>
+<p align="center"><a href="#design-patterns"><img src="docs/readme/design-patterns-en.svg" width="100%" alt="Design patterns"></a></p>
+
 
 | Pattern | Where | Why |
 |---|---|---|
@@ -70,7 +91,9 @@ classDiagram
     GroupLifecycleService --> PaymentGateway
 ```
 
-## Engineering details
+<a name="engineering-details"></a>
+<p align="center"><a href="#engineering-details"><img src="docs/readme/engineering-details-en.svg" width="100%" alt="Engineering details"></a></p>
+
 
 - **Real hotels:** over 18,000 real hotels in 60 destinations and 21 countries, from OpenStreetMap (ODbL): name, address, location, and stars when known. Rooms, prices and reviews are simulated (there is no access to real availability), and the photos match the kind of place: city, seaside, Greek island or resort.
 - **Search by city or country,** in Hebrew or English, and a destinations page by country.
@@ -86,7 +109,9 @@ classDiagram
 - **Legal pages:** privacy policy, terms of use and accessibility statement, in both languages.
 - **Tests:** JUnit 5 - split rules, inventory locking and concurrency, the full life cycle (expiry, retries, give-up and refund), the payment adapter, and an end-to-end web test with MockMvc.
 
-## Run it
+<a name="run-it"></a>
+<p align="center"><a href="#run-it"><img src="docs/readme/run-it-en.svg" width="100%" alt="Run it"></a></p>
+
 
 **Windows, no setup:** double-click `START-DIVISTAY.bat`. It finds Java 21+ on the computer, downloads Maven the first time, starts the site and opens the browser. `TEST-DIVISTAY.bat` runs all the tests.
 
@@ -100,7 +125,9 @@ Or from a terminal with Maven installed: `mvn spring-boot:run`, and `mvn test` f
 
 **Try it:** create a group with 2-3 emails → open the payment links from the *Messages sent* box on the dashboard → pay with test card `4242 4242 4242 4242` (any future date, any CVC). `4000 0000 0000 0002` is declined. To watch the automatic cancellation quickly, set `divistay.payment-window-minutes=2` in `src/main/resources/application.properties`.
 
-## Project structure
+<a name="project-structure"></a>
+<p align="center"><a href="#project-structure"><img src="docs/readme/project-structure-en.svg" width="100%" alt="Project structure"></a></p>
+
 
 ```
 src/main/java/com/divistay/
@@ -117,7 +144,9 @@ src/main/java/com/divistay/
 docs/            SRS and Software Architecture Document (UML)
 ```
 
-## Deploy
+<a name="deploy"></a>
+<p align="center"><a href="#deploy"><img src="docs/readme/deploy-en.svg" width="100%" alt="Deploy"></a></p>
+
 
 DiviStay is a Java server, so it doesn't run on Vercel. The simplest host is [Render](https://render.com), which has a free plan:
 
@@ -127,9 +156,21 @@ DiviStay is a Java server, so it doesn't run on Vercel. The simplest host is [Re
 
 On the free plan the server sleeps after 15 minutes without visitors, and the first visit after that takes about half a minute. Bookings are kept in memory, so they reset when the server restarts, which is fine for a demo.
 
-## Scope and next steps
+<a name="scope-and-next-steps"></a>
+<p align="center"><a href="#scope-and-next-steps"><img src="docs/readme/scope-and-next-steps-en.svg" width="100%" alt="Scope and next steps"></a></p>
+
 
 Payments and the hotel system are **simulated** (no real money), messages appear in an on-screen outbox instead of email, and data is kept in memory. Each of these sits behind an interface, so the next steps are adapters, not rewrites: a real payment provider, a hotel API, an email service and a database (Spring Data JPA).
 
----
-*Designed by Noya, Amit and Amir as part of a Software Engineering course; implemented by Noya.*
+
+<p align="center"><sub><i>Designed by Noya, Amit and Amir as part of a Software Engineering course; implemented by Noya.</i></sub></p>
+
+<a name="contact"></a>
+<p align="center"><a href="#contact"><img src="docs/readme/footer-en.svg" width="100%" alt="Built by Noya Adivi"></a></p>
+
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="https://img.shields.io/badge/Open_DiviStay-FFD5C9?style=for-the-badge&logo=github&logoColor=A8483A" alt="Open DiviStay"></a>
+  <a href="https://www.linkedin.com/in/noya-adivi/"><img src="https://img.shields.io/badge/LinkedIn-DAD5FF?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzU1NDhDOCIgZD0iTTIwLjQ1IDIwLjQ1aC0zLjU2di01LjU3YzAtMS4zMy0uMDMtMy4wNC0xLjg1LTMuMDQtMS44NiAwLTIuMTQgMS40NS0yLjE0IDIuOTR2NS42N0g5LjM1VjloMy40MXYxLjU2aC4wNWMuNDgtLjkgMS42NC0xLjg1IDMuMzctMS44NSAzLjYgMCA0LjI3IDIuMzcgNC4yNyA1LjQ2djYuMjh6TTUuMzQgNy40M2EyLjA2IDIuMDYgMCAxIDEgMC00LjEzIDIuMDYgMi4wNiAwIDAgMSAwIDQuMTN6TTcuMTIgMjAuNDVIMy41NlY5aDMuNTZ2MTEuNDV6TTIyLjIyIDBIMS43N0MuNzkgMCAwIC43NyAwIDEuNzN2MjAuNTRDMCAyMy4yMy43OSAyNCAxLjc3IDI0aDIwLjQ1Yy45OCAwIDEuNzgtLjc3IDEuNzgtMS43M1YxLjczQzI0IC43NyAyMy4yIDAgMjIuMjIgMHoiLz48L3N2Zz4=" alt="LinkedIn"></a>
+  <a href="https://noyaadivi.github.io/noya-website"><img src="https://img.shields.io/badge/Portfolio-D9F3E7?style=for-the-badge&logo=githubpages&logoColor=1F7350" alt="Portfolio"></a>
+  <a href="https://github.com/NoyaAdivi"><img src="https://img.shields.io/badge/More_projects-FBD5E0?style=for-the-badge&logo=github&logoColor=A03A5C" alt="More projects"></a>
+</p>
