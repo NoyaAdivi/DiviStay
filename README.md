@@ -11,6 +11,7 @@
 </p>
 
 <p align="center">
+  <!--<img src="https://img.shields.io/github/license/NoyaAdivi/DiviStay?color=DAD5FF&labelColor=5548C8" alt="License">-->
   <a href="https://github.com/NoyaAdivi/DiviStay/commits/main"><img src="https://img.shields.io/github/last-commit/NoyaAdivi/DiviStay?color=FFD5C9&labelColor=A8483A" alt="Last commit"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/languages/top/NoyaAdivi/DiviStay?color=D9F3E7&labelColor=1F7350" alt="Top language"></a>
   <a href="https://github.com/NoyaAdivi/DiviStay"><img src="https://img.shields.io/github/repo-size/NoyaAdivi/DiviStay?color=FBD5E0&labelColor=A03A5C" alt="Repo size"></a>
@@ -44,7 +45,7 @@
 </table>
 
 <a name="how-it-works"></a>
-<p align="center"><a href="https://divistay.onrender.com"><img src="docs/readme/how-it-works-en.svg" width="100%" alt="How it works"></a></p>
+<p align="center"><a href="#design-patterns"><img src="docs/readme/how-it-works-en.svg" width="100%" alt="How it works"></a></p>
 
 
 1. **Search & lock** - the organizer chooses rooms; they are held for **30 minutes** so nobody else can book them (overbooking protection).
@@ -54,7 +55,7 @@
 5. **Cancel automatically** - if time runs out (or the hotel never confirms), the rooms are released and every hold is **voided**: nobody is charged.
 
 <a name="design-patterns"></a>
-<p align="center"><a href="src/main/java"><img src="docs/readme/design-patterns-en.svg" width="100%" alt="Design patterns"></a></p>
+<p align="center"><a href="#engineering-details"><img src="docs/readme/design-patterns-en.svg" width="100%" alt="Design patterns"></a></p>
 
 
 | Pattern | Where | Why |
@@ -91,7 +92,7 @@ classDiagram
 ```
 
 <a name="engineering-details"></a>
-<p align="center"><a href="pom.xml"><img src="docs/readme/engineering-details-en.svg" width="100%" alt="Engineering details"></a></p>
+<p align="center"><a href="#run-it"><img src="docs/readme/engineering-details-en.svg" width="100%" alt="Engineering details"></a></p>
 
 
 - **Real hotels:** over 18,000 real hotels in 60 destinations and 21 countries, from OpenStreetMap (ODbL): name, address, location, and stars when known. Rooms, prices and reviews are simulated (there is no access to real availability), and the photos match the kind of place: city, seaside, Greek island or resort.
@@ -109,7 +110,7 @@ classDiagram
 - **Tests:** JUnit 5 - split rules, inventory locking and concurrency, the full life cycle (expiry, retries, give-up and refund), the payment adapter, and an end-to-end web test with MockMvc.
 
 <a name="run-it"></a>
-<p align="center"><a href="START-DIVISTAY.bat"><img src="docs/readme/run-it-en.svg" width="100%" alt="Run it"></a></p>
+<p align="center"><a href="#project-structure"><img src="docs/readme/run-it-en.svg" width="100%" alt="Run it"></a></p>
 
 
 **Windows, no setup:** double-click `START-DIVISTAY.bat`. It finds Java 21+ on the computer, downloads Maven the first time, starts the site and opens the browser. `TEST-DIVISTAY.bat` runs all the tests.
@@ -125,7 +126,7 @@ Or from a terminal with Maven installed: `mvn spring-boot:run`, and `mvn test` f
 **Try it:** create a group with 2-3 emails → open the payment links from the *Messages sent* box on the dashboard → pay with test card `4242 4242 4242 4242` (any future date, any CVC). `4000 0000 0000 0002` is declined. To watch the automatic cancellation quickly, set `divistay.payment-window-minutes=2` in `src/main/resources/application.properties`.
 
 <a name="project-structure"></a>
-<p align="center"><a href="src"><img src="docs/readme/project-structure-en.svg" width="100%" alt="Project structure"></a></p>
+<p align="center"><a href="#deploy"><img src="docs/readme/project-structure-en.svg" width="100%" alt="Project structure"></a></p>
 
 
 ```
@@ -144,7 +145,7 @@ docs/            SRS and Software Architecture Document (UML)
 ```
 
 <a name="deploy"></a>
-<p align="center"><a href="render.yaml"><img src="docs/readme/deploy-en.svg" width="100%" alt="Deploy"></a></p>
+<p align="center"><a href="#scope-and-next-steps"><img src="docs/readme/deploy-en.svg" width="100%" alt="Deploy"></a></p>
 
 
 DiviStay is a Java server, so it doesn't run on Vercel. The simplest host is [Render](https://render.com), which has a free plan:
@@ -156,7 +157,7 @@ DiviStay is a Java server, so it doesn't run on Vercel. The simplest host is [Re
 On the free plan the server sleeps after 15 minutes without visitors, and the first visit after that takes about half a minute. Bookings are kept in memory, so they reset when the server restarts, which is fine for a demo.
 
 <a name="scope-and-next-steps"></a>
-<p align="center"><a href="docs/"><img src="docs/readme/scope-and-next-steps-en.svg" width="100%" alt="Scope and next steps"></a></p>
+<p align="center"><a href="#contact"><img src="docs/readme/scope-and-next-steps-en.svg" width="100%" alt="Scope and next steps"></a></p>
 
 
 Payments and the hotel system are **simulated** (no real money), messages appear in an on-screen outbox instead of email, and data is kept in memory. Each of these sits behind an interface, so the next steps are adapters, not rewrites: a real payment provider, a hotel API, an email service and a database (Spring Data JPA).
