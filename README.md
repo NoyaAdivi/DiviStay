@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/readme/showcase-en.png" width="100%" alt="DiviStay home page"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/screenshot.png" width="100%" alt="DiviStay home page"></a>
 </p>
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
