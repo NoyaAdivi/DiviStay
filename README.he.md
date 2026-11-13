@@ -30,7 +30,7 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/readme/showcase-he.png" width="100%" alt="דף הבית של DiviStay"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/site-he.png" width="100%" alt="דף הבית של DiviStay"></a>
 </p>
 
 <p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים והביקורות מדומים. הטעינה הראשונה יכולה לקחת כ־30 שניות.</sub></p>
