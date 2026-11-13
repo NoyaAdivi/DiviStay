@@ -28,7 +28,7 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/images/divistay-en.png" width="100%" alt="DiviStay home page"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/readme/showcase-en.png" width="100%" alt="DiviStay home page"></a>
 </p>
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
@@ -53,6 +53,10 @@
 3. **Pay** - each member gets an unguessable personal payment link. Paying *authorizes* (holds) the amount on their card.
 4. **Confirm** - when 100% is paid, the reservation is sent to the hotel. On success the holds are *captured* and receipts are sent; if the hotel's system is down, the request is **retried with exponential backoff**.
 5. **Cancel automatically** - if time runs out (or the hotel never confirms), the rooms are released and every hold is **voided**: nobody is charged.
+
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/images/divistay-en.png" width="100%" alt="DiviStay home page on the live site"></a>
+</p>
 
 <a name="design-patterns"></a>
 <p align="center"><a href="#engineering-details"><img src="docs/readme/design-patterns-en.svg" width="100%" alt="Design patterns"></a></p>

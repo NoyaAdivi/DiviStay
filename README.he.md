@@ -30,7 +30,7 @@
 </p>
 
 <p align="center">
-  <a href="https://divistay.onrender.com"><img src="docs/images/divistay-he.png" width="100%" alt="דף הבית של DiviStay"></a>
+  <a href="https://divistay.onrender.com"><img src="docs/readme/showcase-he.png" width="100%" alt="דף הבית של DiviStay"></a>
 </p>
 
 <p align="center"><sub>פרויקט הדגמה: התשלומים, החדרים, המחירים והביקורות מדומים. הטעינה הראשונה יכולה לקחת כ־30 שניות.</sub></p>
@@ -55,6 +55,10 @@
 3. **תשלום:** כל חבר מקבל קישור תשלום אישי שאי אפשר לנחש. התשלום *מקפיא* את הסכום בכרטיס.
 4. **אישור:** כשמגיעים ל-100%, ההזמנה נשלחת למלון. אם המלון אישר, הסכומים *נגבים* ונשלחות קבלות. אם מערכת המלון לא עונה, המערכת **מנסה שוב** עם המתנה שהולכת וגדלה.
 5. **ביטול אוטומטי:** אם הזמן נגמר, או שהמלון לא אישר, החדרים משתחררים וכל הקפאה **מבוטלת**, כך שאף אחד לא מחויב.
+
+<p align="center">
+  <a href="https://divistay.onrender.com"><img src="docs/images/divistay-he.png" width="100%" alt="דף הבית של DiviStay באתר החי"></a>
+</p>
 
 <a name="s2"></a>
 <p align="center"><a href="#s3"><img src="docs/readme/s2-he.svg" width="100%" alt="תבניות עיצוב"></a></p>
