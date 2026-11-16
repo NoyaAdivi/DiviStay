@@ -71,6 +71,32 @@
 | **Adapter** | `PaymentGateway`, `MockPayGatewayAdapter`, `MockPayClient` | הליבה מדברת עם ממשק תשלום משלה. החלפת ספק תשלום היא Adapter חדש. |
 | **Ports & adapters** | `HotelPmsClient`, `NotificationService`, ה-repositories | בליבה **אין תלות ב-Spring**. Spring רק מחבר את החלקים (`AppConfig`). |
 
+```mermaid
+classDiagram
+    class BookingService
+    class SplitStrategy {
+        <<interface>>
+        +split(SplitContext) List~Long~
+    }
+    class PaymentGateway {
+        <<interface>>
+        +authorize() PaymentResult
+        +capture(ref)
+        +voidAuthorization(ref)
+    }
+    BookingService --> SplitStrategyFactory
+    SplitStrategyFactory --> SplitStrategy
+    SplitStrategy <|.. EqualSplitStrategy
+    SplitStrategy <|.. RoomBasedSplitStrategy
+    SplitStrategy <|.. CustomSplitStrategy
+    BookingService --> PaymentGateway
+    PaymentGateway <|.. MockPayGatewayAdapter
+    MockPayGatewayAdapter --> MockPayClient
+    BookingService --> RoomInventory
+    GroupLifecycleService --> HotelPmsClient
+    GroupLifecycleService --> PaymentGateway
+```
+
 <a name="s3"></a>
 <p align="center"><a href="#s4"><img src="docs/readme/s3-he.svg" width="100%" alt="פרטים הנדסיים"></a></p>
 
@@ -90,7 +116,7 @@
 - **בדיקות:** JUnit 5 לכללי הפיצול, לנעילה ולמקביליות, לכל מחזור החיים, ל-Adapter של התשלום, ובדיקת קצה-לקצה של האתר עם MockMvc.
 
 <a name="s4"></a>
-<p align="center"><a href="#s5"><img src="docs/readme/s4-he.svg" width="100%" alt="הרצה"></a></p>
+<p align="center"><a href="#structure"><img src="docs/readme/s4-he.svg" width="100%" alt="הרצה"></a></p>
 
 
 **בווינדוס, בלי שום הגדרה:** לחיצה כפולה על `START-DIVISTAY.bat`. הקובץ מוצא Java 21 ומעלה במחשב, מוריד את Maven בפעם הראשונה, מפעיל את האתר ופותח את הדפדפן. `TEST-DIVISTAY.bat` מריץ את כל הבדיקות.
@@ -102,6 +128,25 @@
 3. נכנסים ל-**http://localhost:8080**.
 
 **לנסות:** יוצרים קבוצה עם 2-3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC).
+
+<a name="structure"></a>
+<p align="center"><a href="#s5"><img src="docs/readme/project-structure-he.svg" width="100%" alt="מבנה הפרויקט"></a></p>
+
+
+```
+src/main/java/com/divistay/
+├── domain/      BookingGroup, GroupMembership, Hotel, Room, RoomFactory, DateRange, Money…
+├── split/       SplitStrategy + 3 strategies + SplitStrategyFactory
+├── payment/     PaymentGateway, MockPayGatewayAdapter, MockPayClient, CardDetails
+├── inventory/   RoomInventory (locking / overbooking protection)
+├── hotel/       HotelPmsClient, SimulatedHotelPms
+├── notify/      NotificationService, OutboxNotificationService
+├── repo/        repository interfaces + in-memory implementations
+├── security/    SecureTokens
+├── service/     BookingService, GroupLifecycleService
+└── web/         Spring MVC controllers, scheduler, configuration
+docs/            SRS and Software Architecture Document (UML)
+```
 
 <a name="s5"></a>
 <p align="center"><a href="#s6"><img src="docs/readme/s5-he.svg" width="100%" alt="העלאה לאינטרנט"></a></p>
