@@ -66,7 +66,7 @@
 
 | תבנית | איפה | למה |
 |---|---|---|
-| **Strategy** | `SplitStrategy`, ושלוש המימושים שלו | לוגיקת ההזמנה לא יודעת איך העלות מתחלקת. כלל פיצול חדש הוא מחלקה אחת חדשה. |
+| **Strategy** | `SplitStrategy`, ושלושת המימושים שלו | לוגיקת ההזמנה לא יודעת איך העלות מתחלקת. כלל פיצול חדש הוא מחלקה אחת חדשה. |
 | **Factory** | `SplitStrategyFactory`, `RoomFactory` | מקום אחד מחליט באיזו אסטרטגיה להשתמש ואיך נבנה כל סוג חדר. |
 | **Adapter** | `PaymentGateway`, `MockPayGatewayAdapter`, `MockPayClient` | הליבה מדברת עם ממשק תשלום משלה. החלפת ספק תשלום היא Adapter חדש. |
 | **Ports & adapters** | `HotelPmsClient`, `NotificationService`, ה-repositories | בליבה **אין תלות ב-Spring**. Spring רק מחבר את החלקים (`AppConfig`). |
@@ -127,7 +127,9 @@ classDiagram
 2. פותחים את `src/main/java/com/divistay/DiviStayApplication.java` ולוחצים ▶ **Run**.
 3. נכנסים ל-**http://localhost:8080**.
 
-**לנסות:** יוצרים קבוצה עם 2-3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC).
+אפשר גם מטרמינל עם Maven מותקן: `mvn spring-boot:run`, ו־`mvn test` לבדיקות.
+
+**לנסות:** יוצרים קבוצה עם 2-3 כתובות מייל, פותחים את קישורי התשלום מתיבת *Messages sent* בלוח הבקרה, ומשלמים עם כרטיס הבדיקה `4242 4242 4242 4242` (כל תאריך עתידי וכל CVC). הכרטיס `4000 0000 0000 0002` נדחה. כדי לראות את הביטול האוטומטי מהר, מגדירים `divistay.payment-window-minutes=2` בקובץ `src/main/resources/application.properties`.
 
 <a name="structure"></a>
 <p align="center"><a href="#s5"><img src="docs/readme/project-structure-he.svg" width="100%" alt="מבנה הפרויקט"></a></p>
@@ -155,7 +157,7 @@ docs/            SRS and Software Architecture Document (UML)
 האתר הוא שרת Java, ולכן הוא לא עולה ל-Vercel. הדרך הפשוטה היא [Render](https://render.com), שיש לו מסלול חינמי:
 
 1. מעלים את הפרויקט ל-GitHub (מאגר חדש, למשל `DiviStay`).
-2. נכנסים ל-Render עם חשבון GitHub, ובוחרים **New → Blueprint** ואת המאגר. הקובץ `render.yaml` כבר מגדיר הכל, ו-Render בונה את האתר לפי ה-`Dockerfile`.
+2. נכנסים ל-Render עם חשבון GitHub, ובוחרים **New → Blueprint** ואת המאגר. הקובץ `render.yaml` כבר מגדיר הכול, ו-Render בונה את האתר לפי ה-`Dockerfile`.
 3. אחרי כמה דקות מקבלים כתובת כמו `https://divistay.onrender.com`.
 
 כדאי לדעת: במסלול החינמי השרת נרדם אחרי 15 דקות בלי ביקורים, והטעינה הראשונה אחרי זה לוקחת כחצי דקה. כל ההזמנות נשמרות בזיכרון, אז הן מתאפסות כשהשרת מתחיל מחדש. זה בסדר לאתר הדגמה.

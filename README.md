@@ -108,7 +108,7 @@ classDiagram
 - **Idempotency:** the same member paying with the same card twice (double click, retry) can never be charged twice.
 - **State machine:** `BookingGroup` only allows valid transitions (collecting → funded → confirmed / retrying / cancelled).
 - **Two languages:** English and Hebrew (right-to-left) with Spring `MessageSource`; the browser language is detected and the choice is remembered. Messages produced by the core are localized in the web layer (`Translator`), so the business logic stays language-neutral.
-- **Accessibility:** an accessibility menu (text size, high contrast, highlighted links, readable font, stop animations, big cursor), keyboard navigation with a skip link, labelled form groups, WCAG AA colour contrast and an accessibility statement. Respects the system "reduce motion" setting.
+- **Accessibility:** an accessibility menu (text size, high contrast, highlighted links, readable font, stop animations, big cursor), keyboard navigation with a skip link, labeled form groups, WCAG AA color contrast and an accessibility statement. Respects the system "reduce motion" setting.
 - **Dark mode:** follows the system setting and can be switched by hand; the choice is applied before the page paints.
 - **Legal pages:** privacy policy, terms of use and accessibility statement, in both languages.
 - **Tests:** JUnit 5 - split rules, inventory locking and concurrency, the full life cycle (expiry, retries, give-up and refund), the payment adapter, and an end-to-end web test with MockMvc.
