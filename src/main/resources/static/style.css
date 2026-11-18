@@ -1223,3 +1223,11 @@ form.show-amount .member-row { grid-template-columns: 30px 1fr 1.3fr .7fr 36px; 
   .country-head .btn { width: 100%; text-align: center; }
 }
 .a11y-motion .city-photo img { transition: none; }
+
+/* ===== Mobile stability: no sideways drift, pinch-zoom stays allowed ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{max-width:100%;overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none}
+:where(img,svg,video,canvas,iframe,table){max-width:100%}
+:where(img,video){height:auto}
+:where(h1,h2,h3,h4,p,li,a,span,td,th,label,button){overflow-wrap:break-word}
+@media (pointer:coarse){input,select,textarea{font-size:max(16px,1em)}}
