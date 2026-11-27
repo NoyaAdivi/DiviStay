@@ -33,7 +33,7 @@
 
 <p align="center"><sub>Demo project: payments, rooms, prices and reviews are simulated. The first load can take about 30 seconds.</sub></p>
 
-> 📐 Started as a **software architecture and requirements** project (the SRS and UML diagrams are in [`docs/`](docs/)), designed in a team of 3, then **implemented in Java 21 and Spring Boot** and deployed as a live site.
+> 📐 Started as a **software architecture and requirements** project (the SRS and UML diagrams are in [`docs/`](docs/)), designed in a team of 3. I then **implemented the full app on my own in Java 21 and Spring Boot** and deployed it as a live site.
 
 <table align="center">
   <tr>
